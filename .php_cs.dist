@@ -93,7 +93,7 @@ EOD
 		'magic_constant_casing' => true,
 		'method_argument_space' => [
 			'keep_multiple_spaces_after_comma' => false,
-			'on_multiline' => 'ensure_fully_multiline'
+			'on_multiline' => 'ignore' /* ensure_fully_multiline indents weirdly */
 		],
 		'method_chaining_indentation' => true,
 		'modernize_types_casting' => true,
