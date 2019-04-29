@@ -25,8 +25,8 @@ class PublicKey
 		if ( $key instanceof X509 ) {
 			$key = $key->getResource();
 		}
-		\assert(\is_resource( $key ) || \is_string( $key ), 'PublicKey constructed with X509, string or resource' );
-		$this->setResource(\openssl_pkey_get_public( $key ));
+		\assert( \is_resource( $key ) || \is_string( $key ), 'PublicKey constructed with X509, string or resource' );
+		$this->setResource( \openssl_pkey_get_public( $key ) );
 	}
 
 	/**

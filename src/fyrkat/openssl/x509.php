@@ -23,7 +23,7 @@ class X509
 	 */
 	public function __construct( $x509certdata )
 	{
-		$this->setResource(\openssl_x509_read( $x509certdata ));
+		$this->setResource( \openssl_x509_read( $x509certdata ) );
 	}
 
 	/**
@@ -94,7 +94,7 @@ class X509
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_x509_export_to_file( $this->getResource(), $outputFileName, !$withText );
-		\assert(\is_bool( $result ), 'openssl_x509_export_to_file returns boolean' );
+		\assert( \is_bool( $result ), 'openssl_x509_export_to_file returns boolean' );
 		if ( !$result ) {
 			throw new OpenSSLException();
 		}
@@ -111,7 +111,7 @@ class X509
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_x509_export( $this->getResource(), $output, !$withText );
-		\assert(\is_bool( $result ), 'openssl_x509_export returns boolean' );
+		\assert( \is_bool( $result ), 'openssl_x509_export returns boolean' );
 		if ( !$result ) {
 			throw new OpenSSLException();
 		}

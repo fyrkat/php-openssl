@@ -31,7 +31,7 @@ trait ResourceOwner
 	 */
 	protected function setResource( $resource ): void
 	{
-		\assert(\is_resource( $resource ), '$resource is a resource' );
+		\assert( \is_resource( $resource ), '$resource is a resource' );
 		$this->resource = $resource;
 	}
 }

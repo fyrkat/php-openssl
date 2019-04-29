@@ -25,7 +25,7 @@ class OpenSSLException extends Exception
 		while ( $errorMessage = \openssl_error_string() ) {
 			$this->errorMessages[] = $errorMessage;
 		}
-		parent::__construct(\implode( "\n", $this->errorMessages ), 0, $previous );
+		parent::__construct( \implode( "\n", $this->errorMessages ), 0, $previous );
 	}
 
 	/**

@@ -61,7 +61,7 @@ return PhpCsFixer\Config::create()
 		'explicit_string_variable' => true,
 		'full_opening_tag' => true,
 		'fully_qualified_strict_types' => true,
-		'function_declaration' => true,
+		'function_declaration' => false, /* Would remove spaces in function definitions */
 		'function_to_constant' => [
 			'functions' => [ /* default */
 				'get_called_class',
@@ -137,7 +137,7 @@ EOD
 		'no_short_bool_cast' => true,
 		'no_singleline_whitespace_before_semicolons' => true,
 		'no_spaces_after_function_name' => true,
-		'no_spaces_inside_parenthesis' => true,
+		'no_spaces_inside_parenthesis' => false, /* we can't force these using php_cs, but at least don't remove them */
 		'no_superfluous_elseif' => true,
 		'no_superfluous_phpdoc_tags' => false,
 		'no_trailing_whitespace' => true,

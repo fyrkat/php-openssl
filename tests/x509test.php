@@ -33,7 +33,7 @@ class x509Test extends TestCase
 
 	public function testCheckPrivateKey(): void
 	{
-		$this->assertTrue( $this->x509->checkPrivateKey( new PrivateKey( $this->x509PrivPem )) );
+		$this->assertTrue( $this->x509->checkPrivateKey( new PrivateKey( $this->x509PrivPem ) ) );
 	}
 
 	public function testExport(): void
@@ -45,8 +45,8 @@ class x509Test extends TestCase
 
 	public function testFingerprint(): void
 	{
-		$this->assertSame( '85c59c149b62e155d211a410ce7c78edc5271e4c', $this->x509->fingerprint( 'sha1', false ));
-		$this->assertSame(\hex2bin( '85c59c149b62e155d211a410ce7c78edc5271e4c' ), $this->x509->fingerprint( 'sha1', true ));
+		$this->assertSame( '85c59c149b62e155d211a410ce7c78edc5271e4c', $this->x509->fingerprint( 'sha1', false ) );
+		$this->assertSame( \hex2bin( '85c59c149b62e155d211a410ce7c78edc5271e4c' ), $this->x509->fingerprint( 'sha1', true ) );
 	}
 
 	public function testPublicKey(): void
@@ -55,7 +55,7 @@ class x509Test extends TestCase
 		$details = $key->getDetails();
 		$data = \file_get_contents( __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedpubkey.pem' );
 		$this->assertSame( $data, $details['key'] );
-		$this->assertSame( ['bits', 'key', 'rsa', 'type'], \array_keys( $details ));
-		$this->assertSame( ['n', 'e'], \array_keys( $details['rsa'] ));
+		$this->assertSame( ['bits', 'key', 'rsa', 'type'], \array_keys( $details ) );
+		$this->assertSame( ['n', 'e'], \array_keys( $details['rsa'] ) );
 	}
 }

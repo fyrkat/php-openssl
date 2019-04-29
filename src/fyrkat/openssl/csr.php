@@ -23,7 +23,7 @@ class CSR
 	 */
 	public function __construct( $csr )
 	{
-		\assert(\is_string( $csr ) || \is_resource( $csr ), 'CSR constructor needs resource or string as first argument' );
+		\assert( \is_string( $csr ) || \is_resource( $csr ), 'CSR constructor needs resource or string as first argument' );
 		$this->csr = $csr;
 	}
 
@@ -72,7 +72,7 @@ class CSR
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = !\openssl_csr_export_to_file( $this->csr, $outputFileName, !$withText );
-		\assert(\is_bool( $result ), 'openssl_csr_export_to_file returns boolean' );
+		\assert( \is_bool( $result ), 'openssl_csr_export_to_file returns boolean' );
 		if ( false === $result ) {
 			throw new OpenSSLException();
 		}
@@ -92,7 +92,7 @@ class CSR
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = !\openssl_csr_export( $this->csr, $output, !$withText );
-		\assert(\is_bool( $result ), 'openssl_csr_export returns boolean' );
+		\assert( \is_bool( $result ), 'openssl_csr_export returns boolean' );
 		if ( false === $result ) {
 			throw new OpenSSLException();
 		}
@@ -150,12 +150,12 @@ class CSR
 	}
 
 	/**
-	 * Sign a CSR with another certificate ( or itself ) and generate a certificate
+	 * Sign a CSR with another certificate (or itself) and generate a certificate
 	 *
 	 * @see http://php.net/manual/en/function.openssl-csr-sign.php
 	 *
 	 * @param ?X509      $ca   The CA certificate used to sign this CSR, null for self-sign
-	 * @param PrivateKey $key  The private key corresponding to $ca ( if $ca is null, use the PrivateKey that was used to generate this CSR )
+	 * @param PrivateKey $key  The private key corresponding to $ca (if $ca is null, use the PrivateKey that was used to generate this CSR)
 	 * @param int        $days The amount of days this certificate must be valid
 	 * @param ConfigArgs OpenSSL Configuration for this signing operation
 	 * @param int $serial Serial number, generate a random one if omitted

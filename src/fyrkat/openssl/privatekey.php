@@ -17,10 +17,11 @@ class PrivateKey
 	 * Create a pkey resource and wrap around it
 	 *
 	 * @see http://php.net/manual/en/function.openssl-pkey-get-private.php
+	 * @see http://php.net/manual/en/function.openssl-pkey-new.php
 	 *
 	 * @param ?ConfigArgs|?string $keyOrConfig A PEM formatted private key or
 	 *                                         a `file://path/to/file.pem` or
-	 *                                         configuration for a new key ( or null )
+	 *                                         configuration for a new key (or null)
 	 * @param ?string             $passphrase  Passphrase used if key is encrypted
 	 *
 	 * @psalm-suppress RedundantConditionGivenDocblockType
@@ -36,7 +37,7 @@ class PrivateKey
 			\assert( null !== $passphrase, 'PrivateKey cannot have a passphrase when creating a new key' );
 			$result = \openssl_pkey_new( $keyOrConfig->getArray() );
 			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_new returns resource or false' );
-		} elseif (\is_string( $keyOrConfig ) ) {
+		} elseif ( \is_string( $keyOrConfig ) ) {
 			if ( null === $passphrase ) {
 				$result = \openssl_pkey_get_private( $keyOrConfig );
 				\assert( false === $result || \is_resource( $result ), 'openssl_pkey_get_private returns resource or false' );
@@ -79,7 +80,7 @@ class PrivateKey
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase, $configargs->getArray() );
-		\assert(\is_bool( $result ), 'openssl_pkey_export_to_file returns boolean' );
+		\assert( \is_bool( $result ), 'openssl_pkey_export_to_file returns boolean' );
 		if ( false === $result ) {
 			throw new OpenSSLException();
 		}
@@ -104,7 +105,7 @@ class PrivateKey
 		} else {
 			$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase, $configargs->getArray() );
 		}
-		\assert(\is_bool( $result ), 'openssl_pkey_export returns boolean' );
+		\assert( \is_bool( $result ), 'openssl_pkey_export returns boolean' );
 		if ( false === $result ) {
 			throw new OpenSSLException();
 		}
