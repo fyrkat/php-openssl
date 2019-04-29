@@ -19,6 +19,8 @@ class PublicKey
 	 * @see http://php.net/openssl_pkey_get_public
 	 *
 	 * @param mixed $key
+	 *
+	 * @throws OpenSSLException
 	 */
 	public function __construct( $key )
 	{
@@ -26,7 +28,13 @@ class PublicKey
 			$key = $key->getResource();
 		}
 		\assert( \is_resource( $key ) || \is_string( $key ), 'PublicKey constructed with X509, string or resource' );
-		$this->setResource( \openssl_pkey_get_public( $key ) );
+
+		OpenSSLException::flushErrorMessages();
+		$resource = \openssl_pkey_get_public( $key );
+		if ( false === $resource ) {
+			throw new OpenSSLException();
+		}
+		$this->setResource( $resource );
 	}
 
 	/**
@@ -41,6 +49,8 @@ class PublicKey
 	 * Returns an array with the key details
 	 *
 	 * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
+	 *
+	 * @throws OpenSSLException
 	 *
 	 * @return array<string,int|string|array<int|string>> key details
 	 */

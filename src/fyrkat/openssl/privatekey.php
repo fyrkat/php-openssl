@@ -24,6 +24,8 @@ class PrivateKey
 	 *                                         configuration for a new key (or null)
 	 * @param ?string             $passphrase  Passphrase used if key is encrypted
 	 *
+	 * @throws OpenSSLException
+	 *
 	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 */
 	public function __construct( $keyOrConfig = null, string $passphrase = null )
@@ -112,6 +114,8 @@ class PrivateKey
 	}
 
 	/**
+	 * @throws OpenSSLException
+	 *
 	 * @return PublicKey The PublicKey corresponding to this PrivateKey
 	 */
 	public function getPublicKey(): PublicKey

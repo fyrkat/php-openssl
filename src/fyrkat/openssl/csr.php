@@ -128,6 +128,8 @@ class CSR
 	 *
 	 * @param bool $longNames Whether to use short or long names, e.g. CN or commonName
 	 *
+	 * @throws OpenSSLException
+	 *
 	 * @return array<string,string> The subject of the CSR
 	 */
 	public function getSubject( bool $longNames = false ): array
@@ -154,11 +156,14 @@ class CSR
 	 *
 	 * @see http://php.net/manual/en/function.openssl-csr-sign.php
 	 *
-	 * @param ?X509      $ca   The CA certificate used to sign this CSR, null for self-sign
-	 * @param PrivateKey $key  The private key corresponding to $ca (if $ca is null, use the PrivateKey that was used to generate this CSR)
-	 * @param int        $days The amount of days this certificate must be valid
-	 * @param ConfigArgs OpenSSL Configuration for this signing operation
-	 * @param int $serial Serial number, generate a random one if omitted
+	 * @param ?X509      $ca         The CA certificate used to sign this CSR, null for self-sign
+	 * @param PrivateKey $key        The private key corresponding to $ca (if $ca is null,
+	 *                               use the PrivateKey that was used to generate this CSR)
+	 * @param int        $days       The amount of days this certificate must be valid
+	 * @param ConfigArgs $configargs OpenSSL Configuration for this signing operation
+	 * @param int        $serial     Serial number, generate a random one if omitted
+	 *
+	 * @throws OpenSSLException
 	 *
 	 * @return X509 Certificate
 	 */
