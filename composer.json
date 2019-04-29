@@ -1,0 +1,19 @@
+{
+	"name": "fyrkat/x509",
+	"description": "Class wrappers for PHPs built-in openssl_* functions",
+	"type": "library",
+	"license": "BSD-3-Clause",
+	"autoload": {
+		"classmap": ["src/"]
+	},
+	"require": {
+		"php": ">=7.2",
+		"ext-openssl": "*"
+	},
+	"authors": [
+		{
+			"name": "Jørn Åne",
+			"email": "git@jornane.no"
+		}
+	]
+}
