@@ -5,7 +5,7 @@ camera-ready: codestyle psalm phpunit
 clean:
 	rm -rf composer.phar php-cs-fixer-v2.phar phpDocumentor.phar psalm.phar vendor phpdoc dev
 
-test: phpunit
+test: syntax phpunit
 
 composer.phar:
 	curl -sSLO https://getcomposer.org/composer.phar || wget https://getcomposer.org/composer.phar
@@ -34,4 +34,7 @@ codestyle: php-cs-fixer-v2.phar
 phpunit: phpunit-7.phar
 	php phpunit-7.phar
 
-.PHONY: camera-ready codestyle psalm phpunit phpcs clean test
+syntax:
+	find . -name \*.php -print0 | xargs -0 -n1 php -l
+
+.PHONY: camera-ready codestyle psalm phpunit phpcs clean syntax test
