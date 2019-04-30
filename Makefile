@@ -1,6 +1,6 @@
 x509:
 
-camera-ready: syntax codestyle psalm phpunit
+camera-ready: syntax codestyle phpunit psalm
 
 clean:
 	rm -rf composer.phar php-cs-fixer-v2.phar phpDocumentor.phar psalm.phar vendor phpdoc dev
