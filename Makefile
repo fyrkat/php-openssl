@@ -35,6 +35,6 @@ phpunit: phpunit-7.phar
 	php phpunit-7.phar
 
 syntax:
-	find . -name \*.php -print0 | xargs -0 -n1 php -l
+	find . ! -path './vendor/*' -name \*.php -print0 | xargs -0 -n1 php -l
 
 .PHONY: camera-ready codestyle psalm phpunit phpcs clean syntax test
