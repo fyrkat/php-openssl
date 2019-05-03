@@ -36,4 +36,10 @@ class PublicKeyTest extends TestCase
 		$this->assertSame( ['bits', 'key', 'rsa', 'type'], \array_keys( $details ) );
 		$this->assertSame( ['n', 'e'], \array_keys( $details['rsa'] ) );
 	}
+
+	public function testConstructorError(): void
+	{
+		$this->expectException('fyrkat\openssl\OpenSSLException');
+		$pubkey = new PublicKey( 'file:/dev/null' );
+	}
 }

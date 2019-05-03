@@ -25,7 +25,7 @@ class X509
 	public function __construct( $x509certdata )
 	{
 		OpenSSLException::flushErrorMessages();
-		$data = \openssl_x509_read( $x509certdata );
+		$data = @\openssl_x509_read( $x509certdata );
 		/** @psalm-suppress RedundantCondition */
 		\assert( false === $data || \is_resource( $data ), 'openssl_x509_read returns resource or false' );
 		if ( false === $data ) {

@@ -95,4 +95,10 @@ class x509Test extends TestCase
 		$this->assertEquals( [1, 2, 3, 4, 5, 6, 7, 8, 9], \array_keys( $this->x509->parse()->getRawPurposes() ) );
 		$this->assertEquals( [], $this->x509->parse()->getRawExtensions() );
 	}
+
+	public function testConstructorError(): void
+	{
+		$this->expectException('fyrkat\openssl\OpenSSLException');
+		$x509 = new X509( "file:/{$this->x509file}" );
+	}
 }

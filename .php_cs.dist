@@ -53,7 +53,9 @@ return PhpCsFixer\Config::create()
 		'error_suppression' => [
 			'mute_deprecation_error' => false,
 			'noise_remaining_usages' => true,
-			'noise_remaining_usages_exclude' => []
+			'noise_remaining_usages_exclude' => [
+				'openssl_x509_read',
+			]
 		],
 		'escape_implicit_backslashes' => [
 			'double_quoted' => true,
