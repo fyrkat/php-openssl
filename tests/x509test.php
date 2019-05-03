@@ -92,6 +92,7 @@ class x509Test extends TestCase
 		$this->assertSame( 0, $this->x509->parse()->getVersion() );
 		$this->assertEquals( new \DateTimeImmutable( '2019-01-01 22:51:47' ), $this->x509->parse()->getValidFrom() );
 		$this->assertEquals( new \DateTimeImmutable( '3018-05-04 22:51:47' ), $this->x509->parse()->getValidTo() );
+		$this->assertEquals( [1, 2, 3, 4, 5, 6, 7, 8, 9], \array_keys( $this->x509->parse()->getRawPurposes() ) );
 		$this->assertEquals( [], $this->x509->parse()->getRawExtensions() );
 	}
 }
