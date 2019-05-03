@@ -142,6 +142,10 @@ class X509
 	 * Calculate the fingerprint, or digest, of the X.509 certificate
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-fingerprint.php
+	 * @see http://php.net/manual/en/function.openssl-get-md-methods.php
+	 *
+	 * @param string $hashAlgorithm The digest method or hash algorithm to use
+	 * @param bool   $rawOutput     TRUE to output raw binary data, or FALSE to output lowercase hexits
 	 *
 	 * @throws OpenSSLException
 	 */

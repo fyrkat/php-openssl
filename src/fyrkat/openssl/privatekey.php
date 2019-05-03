@@ -19,48 +19,52 @@ class PrivateKey
 	 * @see http://php.net/manual/en/function.openssl-pkey-get-private.php
 	 * @see http://php.net/manual/en/function.openssl-pkey-new.php
 	 *
-	 * @param ?ConfigArgs|?string $keyOrConfig A PEM formatted private key or
-	 *                                         a `file://path/to/file.pem` or
-	 *                                         configuration for a new key (or null)
-	 * @param ?string             $passphrase  Passphrase used if key is encrypted
+	 * @param null|ConfigArgs|string $keyOrConfig A PEM formatted private key or
+	 *                                            a `file://path/to/file.pem` or
+	 *                                            configuration for a new key or
+	 *                                            null for a new key
+	 * @param ?string                $passphrase  Passphrase used if existing key is encrypted.
+	 *                                            Must be null for new key
 	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 *
 	 * @throws OpenSSLException
 	 */
 	public function __construct( $keyOrConfig = null, string $passphrase = null )
 	{
+		\assert( null === $keyOrConfig || \is_string( $keyOrConfig ) || $keyOrConfig instanceof ConfigArgs, 'PrivateKey constructor expects ConfigArgs, string or null' );
+
 		$result = null;
 		OpenSSLException::flushErrorMessages();
-		if ( null === $keyOrConfig ) {
-			$result = \openssl_pkey_new();
-			/** @psalm-suppress RedundantCondition */
-			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_new returns resource or false' );
-		} elseif ( $keyOrConfig instanceof ConfigArgs ) {
-			/** @psalm-suppress RedundantCondition */
-			\assert( null !== $passphrase, 'PrivateKey cannot have a passphrase when creating a new key' );
-			$result = \openssl_pkey_new( $keyOrConfig->getArray() );
-			/** @psalm-suppress RedundantCondition */
-			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_new returns resource or false' );
-		} elseif ( \is_string( $keyOrConfig ) ) {
+		if ( \is_string( $keyOrConfig ) ) {
+			// Import existing key
+
 			if ( null === $passphrase ) {
 				$result = \openssl_pkey_get_private( $keyOrConfig );
-				/** @psalm-suppress RedundantCondition */
-				\assert( false === $result || \is_resource( $result ), 'openssl_pkey_get_private returns resource or false' );
 			} else {
 				$result = \openssl_pkey_get_private( $keyOrConfig, $passphrase );
-				/** @psalm-suppress RedundantCondition */
-				\assert( false === $result || \is_resource( $result ), 'openssl_pkey_get_private returns resource or false' );
 			}
-		} else {
-			// Should never happen, but let's crash if it does
-			\assert( false, 'PrivateKey constructor requires string, null or ConfigArgs as first argument' );
+
+			/** @psalm-suppress RedundantCondition */
+			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_get_private returns resource or false' );
+		} else /* null or ConfigArgs */ {
+			if ( null === $keyOrConfig ) {
+				// Create new key without configuration
+
+				$result = \openssl_pkey_new();
+			} elseif ( $keyOrConfig instanceof ConfigArgs ) {
+				// Create new key with configuration
+
+				\assert( null !== $passphrase, 'PrivateKey cannot have a passphrase when creating a new key' );
+				$result = \openssl_pkey_new( $keyOrConfig->getArray() );
+			}
+
+			/** @psalm-suppress RedundantCondition */
+			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_new returns resource or false' );
 		}
+
 		if ( false === $result ) {
 			throw new OpenSSLException();
 		}
-
-		// Should never happen, but let's crash if it does
-		\assert( null !== $result, 'Code path fell through, no OpenSSL resource was set' );
 
 		$this->setResource( $result );
 	}

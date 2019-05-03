@@ -74,6 +74,16 @@ class PublicKey
 		return $result;
 	}
 
+	/**
+	 * Calculate the fingerprint, or digest, of the public key
+	 *
+	 * @see http://php.net/manual/en/function.openssl-get-md-methods.php
+	 *
+	 * @param string $hashAlgorithm The digest method or hash algorithm to use
+	 * @param bool   $rawOutput     TRUE to output raw binary data, or FALSE to output lowercase hexits
+	 *
+	 * @throws OpenSSLException
+	 */
 	public function fingerprint( string $hashAlgorithm = 'sha1', bool $rawOutput = false ): string
 	{
 		/** @var string */
