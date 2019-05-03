@@ -9,6 +9,7 @@
 
 namespace fyrkat\openssl;
 
+/** @psalm-suppress PropertyNotSetInConstructor */
 class X509
 {
 	use ResourceOwner;
@@ -23,7 +24,15 @@ class X509
 	 */
 	public function __construct( $x509certdata )
 	{
-		$this->setResource( \openssl_x509_read( $x509certdata ) );
+		OpenSSLException::flushErrorMessages();
+		$data = \openssl_x509_read( $x509certdata );
+		/** @psalm-suppress RedundantCondition */
+		\assert( false === $data || \is_resource( $data ), 'openssl_x509_read returns resource or false' );
+		if ( false === $data ) {
+			throw new OpenSSLException();
+		}
+
+		$this->setResource( $data );
 	}
 
 	/**
