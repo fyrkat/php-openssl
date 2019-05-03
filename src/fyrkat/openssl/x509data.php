@@ -91,12 +91,12 @@ class X509Data
 		return $this->x509data['signatureTypeNID'];
 	}
 
-	public function getPurposes(): array
+	public function getRawPurposes(): array
 	{
 		return $this->x509data['purposes'];
 	}
 
-	public function getExtensions(): array
+	public function getRawExtensions(): array
 	{
 		return $this->x509data['extensions'];
 	}
