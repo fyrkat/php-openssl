@@ -35,6 +35,7 @@ class PublicKeyTest extends TestCase
 		$this->assertSame( $this->pubkeyData, $details['key'] );
 		$this->assertSame( ['bits', 'key', 'rsa', 'type'], \array_keys( $details ) );
 		$this->assertSame( ['n', 'e'], \array_keys( $details['rsa'] ) );
+		$this->assertSame( 'af2d025eaaa92ddfcd2b578cbe72fa1ab9c3df06', $this->pubkey->fingerprint( 'sha1' ) );
 	}
 
 	public function testConstructor(): void

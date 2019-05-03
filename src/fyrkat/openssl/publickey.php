@@ -73,4 +73,13 @@ class PublicKey
 
 		return $result;
 	}
+
+	public function fingerprint( string $hashAlgorithm = 'sha1', bool $rawOutput = false ): string
+	{
+		/** @var string */
+		$key = $this->getDetails()['key'];
+		\preg_match( '/-----BEGIN PUBLIC KEY-----\\s+(.*)\\s+-----END PUBLIC KEY-----/ms', $key, $matches );
+
+		return \hash( $hashAlgorithm, \base64_decode( $matches[1], true ), $rawOutput );
+	}
 }
