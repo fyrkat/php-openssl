@@ -182,12 +182,6 @@ class CSR
 		$cacert = null === $ca ? null : $ca->getResource();
 		$privKey = $key->getResource();
 		OpenSSLException::flushErrorMessages();
-		/**
-		 * Psalm thinks that $cacert cannot be null, but documentation says otherwise
-		 *
-		 * @see http://php.net/manual/en/function.openssl-csr-sign.php
-		 * @psalm-suppress PossiblyNullArgument
-		 */
 		$result = \openssl_csr_sign( $this->csr, $cacert, $privKey, $days, $configargs->getArray(), $serial );
 		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_resource( $result ), 'openssl_csr_sign returns resource or false' );
