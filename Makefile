@@ -17,7 +17,7 @@ phpDocumentor.phar:
 	curl -sSLO http://phpdoc.org/phpDocumentor.phar || wget http://phpdoc.org/phpDocumentor.phar
 
 psalm.phar:
-	curl -sSLO https://github.com/vimeo/psalm/releases/download/2.0.8/psalm.phar || wget https://github.com/vimeo/psalm/releases/download/2.0.8/psalm.phar
+	curl -sSLO https://github.com/vimeo/psalm/releases/download/3.2.10/psalm.phar || wget https://github.com/vimeo/psalm/releases/download/3.2.10/psalm.phar
 
 phpunit-7.phar:
 	curl -sSLO https://phar.phpunit.de/phpunit-7.phar || wget https://phar.phpunit.de/phpunit-7.phar

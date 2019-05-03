@@ -34,17 +34,22 @@ class PrivateKey
 		OpenSSLException::flushErrorMessages();
 		if ( null === $keyOrConfig ) {
 			$result = \openssl_pkey_new();
+			/** @psalm-suppress RedundantCondition */
 			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_new returns resource or false' );
 		} elseif ( $keyOrConfig instanceof ConfigArgs ) {
+			/** @psalm-suppress RedundantCondition */
 			\assert( null !== $passphrase, 'PrivateKey cannot have a passphrase when creating a new key' );
 			$result = \openssl_pkey_new( $keyOrConfig->getArray() );
+			/** @psalm-suppress RedundantCondition */
 			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_new returns resource or false' );
 		} elseif ( \is_string( $keyOrConfig ) ) {
 			if ( null === $passphrase ) {
 				$result = \openssl_pkey_get_private( $keyOrConfig );
+				/** @psalm-suppress RedundantCondition */
 				\assert( false === $result || \is_resource( $result ), 'openssl_pkey_get_private returns resource or false' );
 			} else {
 				$result = \openssl_pkey_get_private( $keyOrConfig, $passphrase );
+				/** @psalm-suppress RedundantCondition */
 				\assert( false === $result || \is_resource( $result ), 'openssl_pkey_get_private returns resource or false' );
 			}
 		} else {
@@ -82,6 +87,7 @@ class PrivateKey
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase, $configargs->getArray() );
+		/** @psalm-suppress RedundantCondition */
 		\assert( \is_bool( $result ), 'openssl_pkey_export_to_file returns boolean' );
 		if ( false === $result ) {
 			throw new OpenSSLException();
@@ -107,6 +113,7 @@ class PrivateKey
 		} else {
 			$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase, $configargs->getArray() );
 		}
+		/** @psalm-suppress RedundantCondition */
 		\assert( \is_bool( $result ), 'openssl_pkey_export returns boolean' );
 		if ( false === $result ) {
 			throw new OpenSSLException();

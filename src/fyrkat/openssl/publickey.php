@@ -58,6 +58,7 @@ class PublicKey
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_pkey_get_details( $this->getResource() );
+		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_array( $result ), 'openssl_pkey_get_details returns array or false' );
 		if ( false === $result ) {
 			throw new OpenSSLException();

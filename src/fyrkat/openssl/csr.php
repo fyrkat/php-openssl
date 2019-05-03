@@ -20,6 +20,8 @@ class CSR
 	 * @see http://php.net/manual/en/openssl.certparams.php
 	 *
 	 * @param resource|string $csr
+	 *
+	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 */
 	public function __construct( $csr )
 	{
@@ -50,6 +52,7 @@ class CSR
 		} else {
 			$result = \openssl_csr_new( $dn->getArray(), $res, $configargs->getArray(), $extraattribs );
 		}
+		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_resource( $result ), 'openssl_csr_new returns resource or false' );
 		if ( false === $result ) {
 			throw new OpenSSLException();
@@ -72,6 +75,7 @@ class CSR
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = !\openssl_csr_export_to_file( $this->csr, $outputFileName, !$withText );
+		/** @psalm-suppress RedundantCondition */
 		\assert( \is_bool( $result ), 'openssl_csr_export_to_file returns boolean' );
 		if ( false === $result ) {
 			throw new OpenSSLException();
@@ -92,6 +96,7 @@ class CSR
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = !\openssl_csr_export( $this->csr, $output, !$withText );
+		/** @psalm-suppress RedundantCondition */
 		\assert( \is_bool( $result ), 'openssl_csr_export returns boolean' );
 		if ( false === $result ) {
 			throw new OpenSSLException();
@@ -111,6 +116,7 @@ class CSR
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_csr_get_public_key( $this->csr );
+		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_resource( $result ), 'openssl_csr_get_public_key returns resource or false' );
 		if ( false === $result ) {
 			throw new OpenSSLException();
@@ -136,13 +142,7 @@ class CSR
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_csr_get_subject( $this->csr, !$longNames );
-		/**
-		 * Psalm thinks that openssl_csr_get_subject only returns array,
-		 * but it can also return false.
-		 *
-		 * @see https://github.com/php/php-src/blob/ee939b70d316fba104a2d41b72b2c17ac711be6c/ext/openssl/openssl.c#L3667
-		 * @psalm-suppress TypeDoesNotContainType
-		 */
+		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_array( $result ), 'openssl_csr_get_subject returns array or false' );
 		if ( false === $result ) {
 			throw new OpenSSLException();
@@ -190,6 +190,7 @@ class CSR
 		 * @psalm-suppress PossiblyNullArgument
 		 */
 		$result = \openssl_csr_sign( $this->csr, $cacert, $privKey, $days, $configargs->getArray(), $serial );
+		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_resource( $result ), 'openssl_csr_sign returns resource or false' );
 		if ( false === $result ) {
 			throw new OpenSSLException();

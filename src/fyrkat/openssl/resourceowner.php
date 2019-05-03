@@ -12,8 +12,6 @@ namespace fyrkat\openssl;
 trait ResourceOwner
 {
 	/**
-	 * @psalm-suppress PropertyNotSetInConstructor
-	 *
 	 * @var resource
 	 */
 	private $resource;
@@ -28,6 +26,7 @@ trait ResourceOwner
 
 	/**
 	 * @param resource $resource
+	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 */
 	protected function setResource( $resource ): void
 	{

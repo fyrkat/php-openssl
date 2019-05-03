@@ -28,8 +28,13 @@ class DN
 	public function __toString(): string
 	{
 		$result = '';
-		foreach ( $this->dnData as $key => $value ) {
-			$result .= "/${key}=${value}";
+		foreach ( $this->dnData as $key => $values ) {
+			if ( \is_string( $values ) ) {
+				$values = [$values];
+			}
+			foreach ( $values as $value ) {
+				$result .= "/${key}=${value}";
+			}
 		}
 
 		return $result;
