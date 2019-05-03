@@ -137,4 +137,23 @@ class X509
 
 		return $result;
 	}
+
+	/**
+	 * Parse the X.509 certificate
+	 *
+	 * @param bool $longNames Whether to use short or long names, e.g. CN or commonName
+	 *
+	 * @return X509Data The parsed data from the certificate
+	 */
+	public function parse( bool $longNames = false ): X509Data
+	{
+		OpenSSLException::flushErrorMessages();
+		$result = \openssl_x509_parse( $this->getResource(), !$longNames );
+		\assert( false === $result || \is_array( $result ), 'openssl_x509_fingerprint returns array or false' );
+		if ( false === $result ) {
+			throw new OpenSSLException();
+		}
+
+		return new X509Data( $result, $longNames );
+	}
 }
