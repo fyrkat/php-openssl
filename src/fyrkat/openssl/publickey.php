@@ -75,6 +75,32 @@ class PublicKey
 	}
 
 	/**
+	 * Exports the public key as a string
+	 *
+	 * @param string &$output String to write PEM encoded CSR in
+	 *
+	 * @throws OpenSSLException
+	 *
+	 * @psalm-suppress ReferenceConstraintViolation
+	 */
+	public function export( string &$output ): void
+	{
+		$output = $this->getDetails()['key'];
+	}
+
+	/**
+	 * Export the public key to a file
+	 *
+	 * @param string $outputFileName Path to the output file
+	 *
+	 * @throws OpenSSLException
+	 */
+	public function exportToFile( string $outputFileName ): void
+	{
+		\file_put_contents( $outputFileName, $this->getDetails()['key'] );
+	}
+
+	/**
 	 * Calculate the fingerprint, or digest, of the public key
 	 *
 	 * @see http://php.net/manual/en/function.openssl-get-md-methods.php
@@ -87,7 +113,8 @@ class PublicKey
 	public function fingerprint( string $hashAlgorithm = 'sha1', bool $rawOutput = false ): string
 	{
 		/** @var string */
-		$key = $this->getDetails()['key'];
+		$key = '';
+		$this->export( $key );
 		\preg_match( '/-----BEGIN PUBLIC KEY-----\\s+(.*)\\s+-----END PUBLIC KEY-----/ms', $key, $matches );
 
 		return \hash( $hashAlgorithm, \base64_decode( $matches[1], true ), $rawOutput );

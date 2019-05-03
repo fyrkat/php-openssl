@@ -61,7 +61,7 @@ class CSR
 	}
 
 	/**
-	 * Export a CSR to a file
+	 * Export the CSR to a file
 	 *
 	 * @see http://php.net/manual/en/function.openssl-csr-export-to-file.php
 	 *
@@ -82,7 +82,7 @@ class CSR
 	}
 
 	/**
-	 * Exports a CSR as a string
+	 * Exports the CSR as a string
 	 *
 	 * @see http://php.net/manual/en/function.openssl-csr-export.php
 	 *
