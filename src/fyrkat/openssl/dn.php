@@ -20,6 +20,20 @@ class DN
 		$this->dnData = $dn;
 	}
 
+	/**
+	 * Get a string representation for this DN
+	 *
+	 * @return string String representation for this DN
+	 */
+	public function __toString(): string
+	{
+		$result = '';
+		foreach( $this->dnData as $key => $value ) {
+			$result .= "/$key=$value";
+		}
+		return $result;
+	}
+
 	/** @return array<string,string|array<string>> */
 	public function getArray(): array
 	{
