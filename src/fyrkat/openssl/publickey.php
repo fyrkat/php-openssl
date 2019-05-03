@@ -46,6 +46,12 @@ class PublicKey
 		\openssl_free_key( $this->getResource() );
 	}
 
+	/** @psalm-suppress InvalidToString */
+	public function __toString()
+	{
+		return $this->getDetails()['key'];
+	}
+
 	/**
 	 * Returns an array with the key details
 	 *

@@ -37,9 +37,16 @@ class PublicKeyTest extends TestCase
 		$this->assertSame( ['n', 'e'], \array_keys( $details['rsa'] ) );
 	}
 
+	public function testConstructor(): void
+	{
+		// Created using a file path instead of feeding the certificate data
+		$pubkey = new PublicKey( "file://{$this->pubkeyfile}" );
+		$this->assertEquals( $this->pubkey->__toString(), $pubkey->__toString() );
+	}
+
 	public function testConstructorError(): void
 	{
 		$this->expectException('fyrkat\openssl\OpenSSLException');
-		$pubkey = new PublicKey( 'file:/dev/null' );
+		$pubkey = new PublicKey( "file:/{$this->pubkeyfile}" );
 	}
 }
