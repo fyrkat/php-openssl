@@ -37,7 +37,7 @@ class X509
 	}
 
 	/**
-	 * Check if a private key corresponds to a certificate
+	 * Check if a private key corresponds to this certificate
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-check-private-key.php
 	 */
@@ -50,10 +50,12 @@ class X509
 	 * Verify if a certificate can be used for a particular purpose
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-checkpurpose.php
+	 * @see http://php.net/manual/en/openssl.cert.verification.php
+	 * @see Purpose
 	 *
-	 * @param int           $purpose
-	 * @param array<string> $ca
-	 * @param string        $untrustedfile
+	 * @param int           $purpose       See {Purpose}
+	 * @param array<string> $ca            File and directory names that specify the locations of trusted CA files
+	 * @param string        $untrustedfile PEM encoded file holding certificates that can be used to help verify this certificate
 	 *
 	 * @throws OpenSSLException
 	 *
