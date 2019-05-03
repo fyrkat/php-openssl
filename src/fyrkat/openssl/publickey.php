@@ -18,7 +18,8 @@ class PublicKey
 	 *
 	 * @see http://php.net/openssl_pkey_get_public
 	 *
-	 * @param mixed $key
+	 * @param resource|string|X509 $key
+	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 *
 	 * @throws OpenSSLException
 	 */
@@ -27,7 +28,7 @@ class PublicKey
 		if ( $key instanceof X509 ) {
 			$key = $key->getResource();
 		}
-		\assert( \is_resource( $key ) || \is_string( $key ), 'PublicKey constructed with X509, string or resource' );
+		\assert( \is_resource( $key ) || \is_string( $key ), 'PublicKey constructor expects X509, string or resource' );
 
 		OpenSSLException::flushErrorMessages();
 		$resource = \openssl_pkey_get_public( $key );

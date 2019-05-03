@@ -20,7 +20,7 @@ class X509
 	 * @see http://php.net/manual/en/function.openssl-x509-read.php
 	 * @see http://php.net/manual/en/openssl.certparams.php
 	 *
-	 * @param mixed $x509certdata File path to PEM file, or contents of a PEM file
+	 * @param resource|string $x509certdata File path to PEM file, or contents of a PEM file
 	 */
 	public function __construct( $x509certdata )
 	{

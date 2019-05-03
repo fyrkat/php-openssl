@@ -23,10 +23,9 @@ class PrivateKey
 	 *                                         a `file://path/to/file.pem` or
 	 *                                         configuration for a new key (or null)
 	 * @param ?string             $passphrase  Passphrase used if key is encrypted
+	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 *
 	 * @throws OpenSSLException
-	 *
-	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 */
 	public function __construct( $keyOrConfig = null, string $passphrase = null )
 	{

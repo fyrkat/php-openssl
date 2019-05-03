@@ -87,7 +87,7 @@ class ConfigArgs
 	}
 
 	/**
-	 * @return array<string,mixed>
+	 * @return array<string,bool|int|string>
 	 */
 	public function getArray(): array
 	{
