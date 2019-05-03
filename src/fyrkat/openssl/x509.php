@@ -45,6 +45,14 @@ class X509
 		\openssl_x509_free( $this->getResource() );
 	}
 
+	public function __toString()
+	{
+		$out = '';
+		$this->export( $out, false );
+
+		return $out;
+	}
+
 	/**
 	 * Check if a private key corresponds to this certificate
 	 *
