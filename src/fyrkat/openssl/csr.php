@@ -130,9 +130,9 @@ class CSR
 	 *
 	 * @throws OpenSSLException
 	 *
-	 * @return array<string,string> The subject of the CSR
+	 * @return DN The subject of the CSR
 	 */
-	public function getSubject( bool $longNames = false ): array
+	public function getSubject( bool $longNames = false ): DN
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_csr_get_subject( $this->csr, !$longNames );
@@ -148,7 +148,7 @@ class CSR
 			throw new OpenSSLException();
 		}
 
-		return $result;
+		return new DN( $result );
 	}
 
 	/**
