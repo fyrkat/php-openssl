@@ -63,7 +63,7 @@ class x509Test extends TestCase
 	{
 		$key = new PublicKey( $this->x509 );
 		$details = $key->getDetails();
-		$data = \file_get_contents( __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedpubkey.pem' );
+		$data = \file_get_contents( __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'pubkey.pem' );
 		$this->assertSame( $data, $details['key'] );
 		$this->assertSame( ['bits', 'key', 'rsa', 'type'], \array_keys( $details ) );
 		$this->assertSame( ['n', 'e'], \array_keys( $details['rsa'] ) );
