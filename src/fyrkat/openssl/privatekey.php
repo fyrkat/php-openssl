@@ -12,6 +12,7 @@ namespace fyrkat\openssl;
 class PrivateKey
 {
 	use ResourceOwner;
+	use PKeyDetails;
 
 	/**
 	 * Create a pkey resource and wrap around it

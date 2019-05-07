@@ -12,6 +12,7 @@ namespace fyrkat\openssl;
 class PublicKey
 {
 	use ResourceOwner;
+	use PKeyDetails;
 
 	/**
 	 * Create a pkey resource and wrap around it
@@ -46,32 +47,9 @@ class PublicKey
 		\openssl_free_key( $this->getResource() );
 	}
 
-	/** @psalm-suppress InvalidToString */
 	public function __toString()
 	{
-		return $this->getDetails()['key'];
-	}
-
-	/**
-	 * Returns an array with the key details
-	 *
-	 * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
-	 *
-	 * @throws OpenSSLException
-	 *
-	 * @return array<string,int|string|array<int|string>> key details
-	 */
-	public function getDetails(): array
-	{
-		OpenSSLException::flushErrorMessages();
-		$result = \openssl_pkey_get_details( $this->getResource() );
-		/** @psalm-suppress RedundantCondition */
-		\assert( false === $result || \is_array( $result ), 'openssl_pkey_get_details returns array or false' );
-		if ( false === $result ) {
-			throw new OpenSSLException( 'openssl_pkey_get_details' );
-		}
-
-		return $result;
+		return $this->getPublicKeyPem();
 	}
 
 	/**
@@ -85,7 +63,14 @@ class PublicKey
 	 */
 	public function export( string &$output ): void
 	{
-		$output = $this->getDetails()['key'];
+		/**
+		 * According to the comments on the documentation on openssl_pkey_export,
+		 * that function can only export private keys.
+		 *
+		 * @see http://php.net/manual/en/function.openssl-pkey-export.php#44553
+		 * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
+		 */
+		$output = $this->getPublicKeyPem();
 	}
 
 	/**
@@ -97,12 +82,20 @@ class PublicKey
 	 */
 	public function exportToFile( string $outputFileName ): void
 	{
-		\file_put_contents( $outputFileName, $this->getDetails()['key'] );
+		/**
+		 * According to the comments on the documentation on openssl_pkey_export,
+		 * that function can only export private keys.
+		 *
+		 * @see http://php.net/manual/en/function.openssl-pkey-export.php#44553
+		 * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
+		 */
+		\file_put_contents( $outputFileName, $this->getPublicKeyPem() );
 	}
 
 	/**
-	 * Calculate the fingerprint, or digest, of the public key
+	 * Calculate the fingerprint, or digest, of the key
 	 *
+	 * @see http://php.net/manual/en/function.openssl-digest.php
 	 * @see http://php.net/manual/en/function.openssl-get-md-methods.php
 	 *
 	 * @param string $hashAlgorithm The digest method or hash algorithm to use
@@ -113,10 +106,29 @@ class PublicKey
 	public function fingerprint( string $hashAlgorithm = 'sha1', bool $rawOutput = false ): string
 	{
 		/** @var string */
-		$key = '';
-		$this->export( $key );
+		$key = $this->getPublicKeyPem();
 		\preg_match( '/-----BEGIN PUBLIC KEY-----\\s+(.*)\\s+-----END PUBLIC KEY-----/ms', $key, $matches );
 
-		return \hash( $hashAlgorithm, \base64_decode( $matches[1], true ), $rawOutput );
+		return \openssl_digest( \base64_decode( $matches[1], true ), $hashAlgorithm, $rawOutput );
+	}
+
+	/**
+	 * Check if a private key corresponds to this certificate
+	 *
+	 * @param PrivateKey $key The private key to check against
+	 *
+	 * @return bool Returns True if $key is the private key that corresponds to cert, or false otherwise
+	 */
+	public function checkPrivateKey( PrivateKey $key ): bool
+	{
+		$myDetails = $this->getDetails();
+		$theirDetails = $key->getDetails();
+		if ( \array_key_exists( 'key', $myDetails ) && \array_key_exists( 'key', $theirDetails) ) {
+			if ( $myDetails['key'] === $theirDetails['key'] ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

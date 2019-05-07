@@ -10,6 +10,7 @@
 namespace fyrkat\openssl\tests;
 
 use fyrkat\openssl\PublicKey;
+use fyrkat\openssl\PrivateKey;
 
 use PHPUnit\Framework\TestCase;
 
@@ -18,15 +19,27 @@ class PublicKeyTest extends TestCase
 	/** @var PublicKey */
 	private $pubkey;
 
+	/** @var string */
 	private $pubkeyData;
+
+	/** @var PublicKey */
+	private $privkey;
+
+	/** @var string */
+	private $privkeyData;
 
 	/** @var string */
 	private $pubkeyfile = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedx509-pubkey.pem';
+
+	/** @var string */
+	private $privkeyfile = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedx509-privkey.pem';
 
 	public function setUp(): void
 	{
 		$this->pubkeyData = \file_get_contents( $this->pubkeyfile );
 		$this->pubkey = new PublicKey( $this->pubkeyData );
+		$this->privkeyData = \file_get_contents( $this->privkeyfile );
+		$this->privkey = new PrivateKey( $this->privkeyData );
 	}
 
 	public function testPublicKey(): void
@@ -49,5 +62,10 @@ class PublicKeyTest extends TestCase
 	{
 		$this->expectException( 'fyrkat\openssl\OpenSSLException' );
 		$pubkey = new PublicKey( "file:/{$this->pubkeyfile}" );
+	}
+
+	public function testMatchingKey(): void
+	{
+		$this->assertTrue( $this->pubkey->checkPrivateKey( $this->privkey ) );
 	}
 }

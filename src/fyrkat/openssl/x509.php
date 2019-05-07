@@ -57,6 +57,10 @@ class X509
 	 * Check if a private key corresponds to this certificate
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-check-private-key.php
+	 *
+	 * @param PrivateKey $key The private key to check against
+	 *
+	 * @return bool Returns True if $key is the private key that corresponds to cert, or false otherwise
 	 */
 	public function checkPrivateKey( PrivateKey $key ): bool
 	{
