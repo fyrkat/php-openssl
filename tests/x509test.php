@@ -26,24 +26,31 @@ class x509Test extends TestCase
 	private $x509File = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedx509-cert.pem';
 
 	/** @var string */
-	private $keyFile = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedx509-key.pem';
+	private $privKeyFile = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedx509-privkey.pem';
+
+	/** @var string */
+	private $pubKeyFile = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedx509-pubkey.pem';
 
 	/** @var string */
 	private $x509Pem;
 
 	/** @var string */
-	private $keyPem;
+	private $privKeyPem;
+
+	/** @var string */
+	private $pubKeyPem;
 
 	public function setUp(): void
 	{
 		$this->x509Pem = \file_get_contents( $this->x509File );
-		$this->keyPem = \file_get_contents( $this->keyFile );
+		$this->privKeyPem = \file_get_contents( $this->privKeyFile );
+		$this->pubKeyPem = \file_get_contents( $this->pubKeyFile );
 		$this->x509 = new X509( $this->x509Pem );
 	}
 
 	public function testCheckPrivateKey(): void
 	{
-		$this->assertTrue( $this->x509->checkPrivateKey( new PrivateKey( $this->keyPem ) ) );
+		$this->assertTrue( $this->x509->checkPrivateKey( new PrivateKey( $this->privKeyPem ) ) );
 	}
 
 	public function testExport(): void
@@ -63,8 +70,7 @@ class x509Test extends TestCase
 	{
 		$key = new PublicKey( $this->x509 );
 		$details = $key->getDetails();
-		$data = \file_get_contents( __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'pubkey.pem' );
-		$this->assertSame( $data, $details['key'] );
+		$this->assertSame( $this->pubKeyPem, $details['key'] );
 		$this->assertSame( ['bits', 'key', 'rsa', 'type'], \array_keys( $details ) );
 		$this->assertSame( ['n', 'e'], \array_keys( $details['rsa'] ) );
 	}

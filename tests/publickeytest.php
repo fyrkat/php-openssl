@@ -21,7 +21,7 @@ class PublicKeyTest extends TestCase
 	private $pubkeyData;
 
 	/** @var string */
-	private $pubkeyfile = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'pubkey.pem';
+	private $pubkeyfile = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedx509-pubkey.pem';
 
 	public function setUp(): void
 	{
