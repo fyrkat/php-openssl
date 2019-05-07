@@ -111,7 +111,7 @@ class x509Test extends TestCase
 
 	public function testConstructorError(): void
 	{
-		$this->expectException('fyrkat\openssl\OpenSSLException');
+		$this->expectException( 'fyrkat\openssl\OpenSSLException' );
 		$x509 = new X509( "file:/{$this->x509File}" );
 	}
 }

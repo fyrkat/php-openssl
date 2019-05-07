@@ -47,7 +47,7 @@ class PublicKeyTest extends TestCase
 
 	public function testConstructorError(): void
 	{
-		$this->expectException('fyrkat\openssl\OpenSSLException');
+		$this->expectException( 'fyrkat\openssl\OpenSSLException' );
 		$pubkey = new PublicKey( "file:/{$this->pubkeyfile}" );
 	}
 }
