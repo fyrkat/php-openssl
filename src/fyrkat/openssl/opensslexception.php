@@ -17,13 +17,18 @@ class OpenSSLException extends Exception
 	/** @var string[] */
 	private $errorMessages = [];
 
+	/** @var ?string */
+	private $functionName = null;
+
 	/**
+	 * @param string    $functionName
 	 * @param Throwable $previous
 	 */
-	public function __construct( Throwable $previous = null )
+	public function __construct( string $functionName = null, Throwable $previous = null )
 	{
+		$this->functionName = $functionName;
 		while ( $errorMessage = \openssl_error_string() ) {
-			$this->errorMessages[] = $errorMessage;
+			$this->errorMessages[] = null === $functionName ? $errorMessage : "${functionName}: ${errorMessage}";
 		}
 		parent::__construct( \implode( "\n", $this->errorMessages ), 0, $previous );
 	}

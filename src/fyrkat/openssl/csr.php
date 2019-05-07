@@ -54,7 +54,7 @@ class CSR
 		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_resource( $result ), 'openssl_csr_new returns resource or false' );
 		if ( false === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_csr_new' );
 		}
 
 		return new self( $result );
@@ -77,7 +77,7 @@ class CSR
 		/** @psalm-suppress RedundantCondition */
 		\assert( \is_bool( $result ), 'openssl_csr_export_to_file returns boolean' );
 		if ( false === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_csr_export_to_file' );
 		}
 	}
 
@@ -98,7 +98,7 @@ class CSR
 		/** @psalm-suppress RedundantCondition */
 		\assert( \is_bool( $result ), 'openssl_csr_export returns boolean' );
 		if ( false === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_csr_export' );
 		}
 	}
 
@@ -118,7 +118,7 @@ class CSR
 		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_resource( $result ), 'openssl_csr_get_public_key returns resource or false' );
 		if ( false === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_csr_get_public_key' );
 		}
 
 		return new PublicKey( $result );
@@ -144,7 +144,7 @@ class CSR
 		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_array( $result ), 'openssl_csr_get_subject returns array or false' );
 		if ( false === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_csr_get_subject' );
 		}
 
 		return new DN( $result );
@@ -186,7 +186,7 @@ class CSR
 		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_resource( $result ), 'openssl_csr_sign returns resource or false' );
 		if ( false === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_csr_sign' );
 		}
 
 		return new X509( $result );

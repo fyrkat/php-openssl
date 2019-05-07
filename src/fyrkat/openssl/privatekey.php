@@ -46,6 +46,10 @@ class PrivateKey
 
 			/** @psalm-suppress RedundantCondition */
 			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_get_private returns resource or false' );
+
+			if ( false === $result ) {
+				throw new OpenSSLException( 'openssl_pkey_get_private' );
+			}
 		} else /* null or ConfigArgs */ {
 			if ( null === $keyOrConfig ) {
 				// Create new key without configuration
@@ -60,10 +64,10 @@ class PrivateKey
 
 			/** @psalm-suppress RedundantCondition */
 			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_new returns resource or false' );
-		}
 
-		if ( false === $result ) {
-			throw new OpenSSLException();
+			if ( false === $result ) {
+				throw new OpenSSLException( 'openssl_pkey_new' );
+			}
 		}
 
 		$this->setResource( $result );
@@ -93,7 +97,7 @@ class PrivateKey
 		/** @psalm-suppress RedundantCondition */
 		\assert( \is_bool( $result ), 'openssl_pkey_export_to_file returns boolean' );
 		if ( false === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_pkey_export_to_file' );
 		}
 	}
 
@@ -119,7 +123,7 @@ class PrivateKey
 		/** @psalm-suppress RedundantCondition */
 		\assert( \is_bool( $result ), 'openssl_pkey_export returns boolean' );
 		if ( false === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_pkey_export' );
 		}
 	}
 

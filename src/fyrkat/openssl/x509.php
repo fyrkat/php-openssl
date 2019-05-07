@@ -29,7 +29,7 @@ class X509
 		/** @psalm-suppress RedundantCondition */
 		\assert( false === $data || \is_resource( $data ), 'openssl_x509_read returns resource or false' );
 		if ( false === $data ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_x509_read' );
 		}
 
 		$this->setResource( $data );
@@ -96,7 +96,7 @@ class X509
 		}
 		\assert( -1 === $result || \is_bool( $result ), 'openssl_x509_checkpurpose returns -1 or boolean' );
 		if ( -1 === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_x509_checkpurpose' );
 		}
 
 		return $result;
@@ -116,7 +116,7 @@ class X509
 		/** @psalm-suppress RedundantCondition */
 		\assert( \is_bool( $result ), 'openssl_x509_export_to_file returns boolean' );
 		if ( !$result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_x509_export_to_file' );
 		}
 	}
 
@@ -134,7 +134,7 @@ class X509
 		/** @psalm-suppress RedundantCondition */
 		\assert( \is_bool( $result ), 'openssl_x509_export returns boolean' );
 		if ( !$result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_x509_export' );
 		}
 	}
 
@@ -156,7 +156,7 @@ class X509
 		/** @psalm-suppress RedundantCondition */
 		\assert( false === $result || \is_string( $result ), 'openssl_x509_fingerprint returns string or false' );
 		if ( false === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_x509_fingerprint' );
 		}
 
 		return $result;
@@ -174,9 +174,9 @@ class X509
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_x509_parse( $this->getResource(), !$longNames );
 		/** @psalm-suppress RedundantCondition */
-		\assert( false === $result || \is_array( $result ), 'openssl_x509_fingerprint returns array or false' );
+		\assert( false === $result || \is_array( $result ), 'openssl_x509_parse returns array or false' );
 		if ( false === $result ) {
-			throw new OpenSSLException();
+			throw new OpenSSLException( 'openssl_x509_parse' );
 		}
 
 		return new X509Data( $result, $longNames );
