@@ -9,6 +9,8 @@
 
 namespace fyrkat\openssl;
 
+use DateTimeImmutable;
+
 class X509Data
 {
 	/** @var array */
@@ -68,14 +70,14 @@ class X509Data
 		return $this->x509data['version'];
 	}
 
-	public function getValidFrom(): \DateTimeImmutable
+	public function getValidFrom(): DateTimeImmutable
 	{
-		return new \DateTimeImmutable( \sprintf( '@%d', $this->x509data['validFrom_time_t'] ) );
+		return new DateTimeImmutable( \sprintf( '@%d', $this->x509data['validFrom_time_t'] ) );
 	}
 
-	public function getValidTo(): \DateTimeImmutable
+	public function getValidTo(): DateTimeImmutable
 	{
-		return new \DateTimeImmutable( \sprintf( '@%d', $this->x509data['validTo_time_t'] ) );
+		return new DateTimeImmutable( \sprintf( '@%d', $this->x509data['validTo_time_t'] ) );
 	}
 
 	public function getSignatureType(): string
