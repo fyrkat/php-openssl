@@ -23,34 +23,34 @@ class x509Test extends TestCase
 	private $x509;
 
 	/** @var string */
-	private $x509file = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedx509.pem';
+	private $x509File = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedx509-cert.pem';
 
 	/** @var string */
-	private $x509PubPem;
+	private $keyFile = __DIR__ . \DIRECTORY_SEPARATOR . 'certs' . \DIRECTORY_SEPARATOR . 'selfsignedx509-key.pem';
 
 	/** @var string */
-	private $x509PrivPem;
+	private $x509Pem;
+
+	/** @var string */
+	private $keyPem;
 
 	public function setUp(): void
 	{
-		$data = \file_get_contents( $this->x509file );
-		$this->x509 = new X509( $data );
-		\preg_match( '/-----BEGIN CERTIFICATE-----\n.*\n-----END CERTIFICATE-----\\n/ms', $data, $matches );
-		$this->x509PubPem = $matches[0];
-		\preg_match( '/-----BEGIN PRIVATE KEY-----\n.*\n-----END PRIVATE KEY-----\\n/ms', $data, $matches );
-		$this->x509PrivPem = $matches[0];
+		$this->x509Pem = \file_get_contents( $this->x509File );
+		$this->keyPem = \file_get_contents( $this->keyFile );
+		$this->x509 = new X509( $this->x509Pem );
 	}
 
 	public function testCheckPrivateKey(): void
 	{
-		$this->assertTrue( $this->x509->checkPrivateKey( new PrivateKey( $this->x509PrivPem ) ) );
+		$this->assertTrue( $this->x509->checkPrivateKey( new PrivateKey( $this->keyPem ) ) );
 	}
 
 	public function testExport(): void
 	{
 		$out = '';
 		$this->x509->export( $out );
-		$this->assertSame( $this->x509PubPem, $out );
+		$this->assertSame( $this->x509Pem, $out );
 	}
 
 	public function testFingerprint(): void
@@ -71,7 +71,7 @@ class x509Test extends TestCase
 
 	public function testCheckPurpose(): void
 	{
-		$this->assertTrue( $this->x509->checkPurpose( Purpose::ANY, [$this->x509file] ) );
+		$this->assertTrue( $this->x509->checkPurpose( Purpose::ANY, [$this->x509File] ) );
 	}
 
 	public function testRawParse(): void
@@ -99,13 +99,13 @@ class x509Test extends TestCase
 	public function testConstructor(): void
 	{
 		// Created using a file path instead of feeding the certificate data
-		$x509 = new X509( "file://{$this->x509file}" );
+		$x509 = new X509( "file://{$this->x509File}" );
 		$this->assertEquals( $this->x509->__toString(), $x509->__toString() );
 	}
 
 	public function testConstructorError(): void
 	{
 		$this->expectException('fyrkat\openssl\OpenSSLException');
-		$x509 = new X509( "file:/{$this->x509file}" );
+		$x509 = new X509( "file:/{$this->x509File}" );
 	}
 }
