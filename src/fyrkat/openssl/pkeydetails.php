@@ -13,9 +13,6 @@ trait PKeyDetails
 {
 	use ResourceOwner;
 
-	/** @var ?array<string,int|string|array<int|string>> */
-	private $details;
-
 	/**
 	 * Get a (PEM encoded) string representation of the public key
 	 *
@@ -76,17 +73,13 @@ trait PKeyDetails
 	 */
 	public function getDetails(): array
 	{
-		if ( null === $this->details ) {
-			OpenSSLException::flushErrorMessages();
-			$details = \openssl_pkey_get_details( $this->getResource() );
-			/** @psalm-suppress RedundantCondition */
-			\assert( false === $details || \is_array( $details ), 'openssl_pkey_get_details returns array or false' );
-			if ( false === $details ) {
-				throw new OpenSSLException( 'openssl_pkey_get_details' );
-			}
-			$this->details = $details;
+		OpenSSLException::flushErrorMessages();
+		$details = \openssl_pkey_get_details( $this->getResource() );
+		/** @psalm-suppress RedundantCondition */
+		\assert( false === $details || \is_array( $details ), 'openssl_pkey_get_details returns array or false' );
+		if ( false === $details ) {
+			throw new OpenSSLException( 'openssl_pkey_get_details' );
 		}
-
-		return $this->details;
+		return $details;
 	}
 }
