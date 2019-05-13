@@ -9,10 +9,12 @@
 
 namespace fyrkat\openssl;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor Doesn't see the $this->setResource in the constructor
+ */
 class PublicKey
 {
-	use ResourceOwner;
-	use PKeyDetails;
+	use PKeyDetails; /* also uses ResourceOwner */
 
 	/**
 	 * Create a pkey resource and wrap around it

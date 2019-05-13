@@ -33,10 +33,10 @@ class CSR
 	 *
 	 * @see http://php.net/manual/en/function.openssl-csr-new.php
 	 *
-	 * @param DN                  $dn
-	 * @param PrivateKey          $key
-	 * @param ConfigArgs          $configargs
-	 * @param array<string,mixed> $extraattribs
+	 * @param DN                   $dn
+	 * @param PrivateKey           $key
+	 * @param ConfigArgs           $configargs
+	 * @param ?array<string,mixed> $extraattribs
 	 *
 	 * @throws OpenSSLException
 	 *
@@ -160,7 +160,7 @@ class CSR
 	 *                               use the PrivateKey that was used to generate this CSR)
 	 * @param int        $days       The amount of days this certificate must be valid
 	 * @param ConfigArgs $configargs OpenSSL Configuration for this signing operation
-	 * @param int        $serial     Serial number, generate a random one if omitted
+	 * @param ?int       $serial     Serial number, generate a random one if omitted
 	 *
 	 * @throws OpenSSLException
 	 *

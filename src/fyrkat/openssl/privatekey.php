@@ -9,10 +9,12 @@
 
 namespace fyrkat\openssl;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor Doesn't see the $this->setResource in the constructor
+ */
 class PrivateKey
 {
-	use ResourceOwner;
-	use PKeyDetails;
+	use PKeyDetails; /* also uses ResourceOwner */
 
 	/**
 	 * Create a pkey resource and wrap around it
@@ -107,9 +109,9 @@ class PrivateKey
 	 *
 	 * @see http://php.net/manual/en/function.openssl-pkey-export.php
 	 *
-	 * @param string $output     Pointer to a string where the output is written
-	 * @param string $passphrase Passphrase used to encrypt the output
-	 * @param ConfigArgs Configuration for overriding the OpenSSL configuration file
+	 * @param string      $output     Pointer to a string where the output is written
+	 * @param string      $passphrase Passphrase used to encrypt the output
+	 * @param ?ConfigArgs $configargs Configuration for overriding the OpenSSL configuration file
 	 *
 	 * @throws OpenSSLException
 	 */

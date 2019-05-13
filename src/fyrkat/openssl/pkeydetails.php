@@ -11,6 +11,8 @@ namespace fyrkat\openssl;
 
 trait PKeyDetails
 {
+	use ResourceOwner;
+
 	/** @var ?array<string,int|string|array<int|string>> */
 	private $details;
 

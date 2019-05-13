@@ -48,39 +48,39 @@ class ConfigArgs
 				case 'digest_alg':
 					\assert( \is_string( $value ), 'digest_alg is string' );
 					$this->digestAlg = $value;
-					continue;
+					break;
 				case 'x509_extensions':
 					\assert( \is_string( $value ), 'x509_extensions is string' );
 					$this->x509Extensions = $value;
-					continue;
+					break;
 				case 'req_extensions':
 					\assert( \is_string( $value ), 'req_extensions is string' );
 					$this->reqExtensions = $value;
-					continue;
+					break;
 				case 'private_key_bits':
 					\assert( \is_int( $value ), 'private_key_bits is int' );
 					$this->privateKeyBits = $value;
-					continue;
+					break;
 				case 'private_key_type':
 					\assert( \is_int( $value ), 'private_key_type is int' );
 					$this->privateKeyType = $value;
-					continue;
+					break;
 				case 'encrypt_key':
 					\assert( \is_bool( $value ), 'encrypt_key is bool' );
 					$this->encryptKey = $value;
-					continue;
+					break;
 				case 'encrypt_key_cipher':
 					\assert( \is_int( $value ), 'encrypt_key_cipher is int' );
 					$this->encryptKeyCipher = $value;
-					continue;
+					break;
 				case 'curve_name':
 					\assert( \is_string( $value ), 'curve_name is string' );
 					$this->curveName = $value;
-					continue;
+					break;
 				case 'config':
 					\assert( \is_string( $value ), 'config is string' );
 					$this->config = $value;
-					continue;
+					break;
 				default: \assert( false, "Illegal \$configargs key ${key}" );
 			}
 		}

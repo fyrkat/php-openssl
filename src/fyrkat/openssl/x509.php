@@ -76,7 +76,7 @@ class X509
 	 *
 	 * @param int           $purpose       See {Purpose}
 	 * @param array<string> $ca            File and directory names that specify the locations of trusted CA files
-	 * @param string        $untrustedfile PEM encoded file holding certificates that can be used to help verify this certificate
+	 * @param ?string       $untrustedfile PEM encoded file holding certificates that can be used to help verify this certificate
 	 *
 	 * @throws OpenSSLException
 	 *

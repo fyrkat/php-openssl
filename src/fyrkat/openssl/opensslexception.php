@@ -21,8 +21,8 @@ class OpenSSLException extends Exception
 	private $functionName = null;
 
 	/**
-	 * @param string    $functionName
-	 * @param Throwable $previous
+	 * @param ?string    $functionName
+	 * @param ?Throwable $previous
 	 */
 	public function __construct( string $functionName = null, Throwable $previous = null )
 	{
