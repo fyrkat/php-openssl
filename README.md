@@ -7,7 +7,7 @@ in progress.  Patches and bug reports welcome.
 
 ## Requirements
 
-* PHP 7.2
+* PHP 7.1
 * Make
 * (for first setup) internet connection
 
