@@ -110,8 +110,16 @@ class PublicKey
 		/** @var string */
 		$key = $this->getPublicKeyPem();
 		\preg_match( '/-----BEGIN PUBLIC KEY-----\\s+(.*)\\s+-----END PUBLIC KEY-----/ms', $key, $matches );
+		\assert( \array_key_exists( 1, $matches ), 'Public key PEM must start with -----BEGIN PUBLIC KEY----- and end with -----END PUBLIC KEY-----' );
+		$decodedPem = \base64_decode( $matches[1], true );
+		\assert( \is_string( $decodedPem ), 'Public key PEM must be base64 encoded' );
 
-		return \openssl_digest( \base64_decode( $matches[1], true ), $hashAlgorithm, $rawOutput );
+		$result = \openssl_digest( $decodedPem, $hashAlgorithm, $rawOutput );
+		if ( false === $result ) {
+			throw new OpenSSLException( 'openssl_pkey_get_public' );
+		}
+
+		return $result;
 	}
 
 	/**

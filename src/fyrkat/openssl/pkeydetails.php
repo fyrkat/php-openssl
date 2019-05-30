@@ -80,6 +80,7 @@ trait PKeyDetails
 		if ( false === $details ) {
 			throw new OpenSSLException( 'openssl_pkey_get_details' );
 		}
+
 		return $details;
 	}
 }
