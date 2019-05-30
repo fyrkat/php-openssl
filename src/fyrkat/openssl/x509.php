@@ -95,7 +95,8 @@ class X509
 			$result = \openssl_x509_checkpurpose(
 					$this->getResource(),
 					$purpose,
-					$ca
+					$ca,
+					$untrustedfile
 				);
 		}
 		\assert( -1 === $result || \is_bool( $result ), 'openssl_x509_checkpurpose returns -1 or boolean' );
