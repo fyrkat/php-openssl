@@ -69,7 +69,7 @@ class PublicKeyTest extends TestCase
 		$this->assertTrue( $this->pubkey->checkPrivateKey( $this->privkey ) );
 	}
 
-	public function testEqualsKey(): void
+	public function testExtractPublicKey(): void
 	{
 		$pubkey = $this->privkey->getPublicKey();
 		$pem1 = '';
