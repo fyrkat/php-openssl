@@ -110,17 +110,19 @@ class PrivateKey
 	 * @see http://php.net/manual/en/function.openssl-pkey-export.php
 	 *
 	 * @param string      $output     Pointer to a string where the output is written
-	 * @param string      $passphrase Passphrase used to encrypt the output
+	 * @param ?string     $passphrase Passphrase used to encrypt the output
 	 * @param ?ConfigArgs $configargs Configuration for overriding the OpenSSL configuration file
 	 *
 	 * @throws OpenSSLException
 	 */
-	public function export( string &$output, string $passphrase, ConfigArgs $configargs = null ): void
+	public function export( string &$output, ?string $passphrase, ConfigArgs $configargs = null ): void
 	{
 		OpenSSLException::flushErrorMessages();
 		if ( null === $configargs ) {
+			/** @psalm-suppress PossiblyNullArgument $passphrase is allowed to be null */
 			$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase );
 		} else {
+			/** @psalm-suppress PossiblyNullArgument $passphrase is allowed to be null */
 			$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase, $configargs->getArray() );
 		}
 		/** @psalm-suppress RedundantCondition */
@@ -131,12 +133,17 @@ class PrivateKey
 	}
 
 	/**
+	 * Get the public key associated with this private key
+	 *
+	 * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
+	 * @see http://bugs.php.net/bug.php?id=25614
+	 *
 	 * @throws OpenSSLException
 	 *
 	 * @return PublicKey The PublicKey corresponding to this PrivateKey
 	 */
 	public function getPublicKey(): PublicKey
 	{
-		return new PublicKey( $this->getResource() );
+		return new PublicKey( $this->getPublicKeyPem() );
 	}
 }
