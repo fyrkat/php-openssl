@@ -99,7 +99,10 @@ class X509
 					$untrustedfile
 				);
 		}
-		\assert( -1 === $result || \is_bool( $result ), 'openssl_x509_checkpurpose returns -1 or boolean' );
+		\assert(
+				-1 === $result || \is_bool( $result ),
+				'openssl_x509_checkpurpose returns -1 or boolean'
+			);
 		if ( -1 === $result ) {
 			throw new OpenSSLException( 'openssl_x509_checkpurpose' );
 		}
@@ -119,7 +122,10 @@ class X509
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_x509_export_to_file( $this->getResource(), $outputFileName, !$withText );
 		/** @psalm-suppress RedundantCondition */
-		\assert( \is_bool( $result ), 'openssl_x509_export_to_file returns boolean' );
+		\assert(
+				\is_bool( $result ),
+				'openssl_x509_export_to_file returns boolean'
+			);
 		if ( !$result ) {
 			throw new OpenSSLException( 'openssl_x509_export_to_file' );
 		}
@@ -137,7 +143,10 @@ class X509
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_x509_export( $this->getResource(), $output, !$withText );
 		/** @psalm-suppress RedundantCondition */
-		\assert( \is_bool( $result ), 'openssl_x509_export returns boolean' );
+		\assert(
+				\is_bool( $result ),
+				'openssl_x509_export returns boolean'
+			);
 		if ( !$result ) {
 			throw new OpenSSLException( 'openssl_x509_export' );
 		}
@@ -159,7 +168,10 @@ class X509
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_x509_fingerprint( $this->getResource(), $hashAlgorithm, $rawOutput );
 		/** @psalm-suppress RedundantCondition */
-		\assert( false === $result || \is_string( $result ), 'openssl_x509_fingerprint returns string or false' );
+		\assert(
+				false === $result || \is_string( $result ),
+				'openssl_x509_fingerprint returns string or false'
+			);
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_x509_fingerprint' );
 		}
@@ -179,7 +191,10 @@ class X509
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_x509_parse( $this->getResource(), !$longNames );
 		/** @psalm-suppress RedundantCondition */
-		\assert( false === $result || \is_array( $result ), 'openssl_x509_parse returns array or false' );
+		\assert(
+				false === $result || \is_array( $result ),
+				'openssl_x509_parse returns array or false'
+			);
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_x509_parse' );
 		}

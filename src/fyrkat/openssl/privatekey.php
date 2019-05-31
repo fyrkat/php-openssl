@@ -34,7 +34,12 @@ class PrivateKey
 	 */
 	public function __construct( $keyOrConfig = null, string $passphrase = null )
 	{
-		\assert( null === $keyOrConfig || \is_string( $keyOrConfig ) || $keyOrConfig instanceof ConfigArgs, 'PrivateKey constructor expects ConfigArgs, string or null' );
+		\assert(
+				null === $keyOrConfig
+				|| \is_string( $keyOrConfig )
+				|| $keyOrConfig instanceof ConfigArgs,
+				'PrivateKey constructor expects ConfigArgs, string or null'
+			);
 
 		$result = null;
 		OpenSSLException::flushErrorMessages();
@@ -48,7 +53,10 @@ class PrivateKey
 			}
 
 			/** @psalm-suppress RedundantCondition */
-			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_get_private returns resource or false' );
+			\assert(
+					false === $result || \is_resource( $result ),
+					'openssl_pkey_get_private returns resource or false'
+				);
 
 			if ( false === $result ) {
 				throw new OpenSSLException( 'openssl_pkey_get_private' );
@@ -61,12 +69,18 @@ class PrivateKey
 			} elseif ( $keyOrConfig instanceof ConfigArgs ) {
 				// Create new key with configuration
 
-				\assert( null !== $passphrase, 'PrivateKey cannot have a passphrase when creating a new key' );
+				\assert(
+						null !== $passphrase,
+						'PrivateKey cannot have a passphrase when creating a new key'
+					);
 				$result = \openssl_pkey_new( $keyOrConfig->getArray() );
 			}
 
 			/** @psalm-suppress RedundantCondition */
-			\assert( false === $result || \is_resource( $result ), 'openssl_pkey_new returns resource or false' );
+			\assert(
+					false === $result || \is_resource( $result ),
+					'openssl_pkey_new returns resource or false'
+				);
 
 			if ( false === $result ) {
 				throw new OpenSSLException( 'openssl_pkey_new' );
@@ -98,7 +112,10 @@ class PrivateKey
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase, $configargs->getArray() );
 		/** @psalm-suppress RedundantCondition */
-		\assert( \is_bool( $result ), 'openssl_pkey_export_to_file returns boolean' );
+		\assert(
+				\is_bool( $result ),
+				'openssl_pkey_export_to_file returns boolean'
+			);
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_pkey_export_to_file' );
 		}
@@ -126,7 +143,10 @@ class PrivateKey
 			$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase, $configargs->getArray() );
 		}
 		/** @psalm-suppress RedundantCondition */
-		\assert( \is_bool( $result ), 'openssl_pkey_export returns boolean' );
+		\assert(
+				\is_bool( $result ),
+				'openssl_pkey_export returns boolean'
+			);
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_pkey_export' );
 		}

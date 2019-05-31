@@ -24,7 +24,10 @@ class CSR
 	 */
 	public function __construct( $csr )
 	{
-		\assert( \is_string( $csr ) || \is_resource( $csr ), 'CSR constructor needs resource or string as first argument' );
+		\assert(
+				\is_string( $csr ) || \is_resource( $csr ),
+				'CSR constructor needs resource or string as first argument'
+			);
 		$this->csr = $csr;
 	}
 
@@ -52,7 +55,10 @@ class CSR
 			$result = \openssl_csr_new( $dn->getArray(), $res, $configargs->getArray(), $extraattribs );
 		}
 		/** @psalm-suppress RedundantCondition */
-		\assert( false === $result || \is_resource( $result ), 'openssl_csr_new returns resource or false' );
+		\assert(
+				false === $result || \is_resource( $result ),
+				'openssl_csr_new returns resource or false'
+			);
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_csr_new' );
 		}
@@ -75,7 +81,10 @@ class CSR
 		OpenSSLException::flushErrorMessages();
 		$result = !\openssl_csr_export_to_file( $this->csr, $outputFileName, !$withText );
 		/** @psalm-suppress RedundantCondition */
-		\assert( \is_bool( $result ), 'openssl_csr_export_to_file returns boolean' );
+		\assert(
+				\is_bool( $result ),
+				'openssl_csr_export_to_file returns boolean'
+			);
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_csr_export_to_file' );
 		}
@@ -96,7 +105,10 @@ class CSR
 		OpenSSLException::flushErrorMessages();
 		$result = !\openssl_csr_export( $this->csr, $output, !$withText );
 		/** @psalm-suppress RedundantCondition */
-		\assert( \is_bool( $result ), 'openssl_csr_export returns boolean' );
+		\assert(
+				\is_bool( $result ),
+				'openssl_csr_export returns boolean'
+			);
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_csr_export' );
 		}
@@ -116,7 +128,10 @@ class CSR
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_csr_get_public_key( $this->csr );
 		/** @psalm-suppress RedundantCondition */
-		\assert( false === $result || \is_resource( $result ), 'openssl_csr_get_public_key returns resource or false' );
+		\assert(
+				false === $result || \is_resource( $result ),
+				'openssl_csr_get_public_key returns resource or false'
+			);
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_csr_get_public_key' );
 		}
@@ -142,7 +157,10 @@ class CSR
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_csr_get_subject( $this->csr, !$longNames );
 		/** @psalm-suppress RedundantCondition */
-		\assert( false === $result || \is_array( $result ), 'openssl_csr_get_subject returns array or false' );
+		\assert(
+				false === $result || \is_array( $result ),
+				'openssl_csr_get_subject returns array or false'
+			);
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_csr_get_subject' );
 		}
@@ -184,7 +202,10 @@ class CSR
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_csr_sign( $this->csr, $cacert, $privKey, $days, $configargs->getArray(), $serial );
 		/** @psalm-suppress RedundantCondition */
-		\assert( false === $result || \is_resource( $result ), 'openssl_csr_sign returns resource or false' );
+		\assert(
+				false === $result || \is_resource( $result ),
+				'openssl_csr_sign returns resource or false'
+			);
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_csr_sign' );
 		}

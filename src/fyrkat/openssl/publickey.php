@@ -31,7 +31,10 @@ class PublicKey
 		if ( $key instanceof X509 ) {
 			$key = $key->getResource();
 		}
-		\assert( \is_resource( $key ) || \is_string( $key ), 'PublicKey constructor expects X509, string or resource' );
+		\assert(
+				\is_resource( $key ) || \is_string( $key ),
+				'PublicKey constructor expects X509, string or resource'
+			);
 
 		OpenSSLException::flushErrorMessages();
 		$resource = \openssl_pkey_get_public( $key );
@@ -110,9 +113,15 @@ class PublicKey
 		/** @var string */
 		$key = $this->getPublicKeyPem();
 		\preg_match( '/-----BEGIN PUBLIC KEY-----\\s+(.*)\\s+-----END PUBLIC KEY-----/ms', $key, $matches );
-		\assert( \array_key_exists( 1, $matches ), 'Public key PEM must start with -----BEGIN PUBLIC KEY----- and end with -----END PUBLIC KEY-----' );
+		\assert(
+				\array_key_exists( 1, $matches ),
+				'Public Key PEM must be encapsulated between BEGIN and END tokens'
+			);
 		$decodedPem = \base64_decode( $matches[1], true );
-		\assert( \is_string( $decodedPem ), 'Public key PEM must be base64 encoded' );
+		\assert(
+				\is_string( $decodedPem ),
+				'Public key PEM must be base64 encoded'
+			);
 
 		$result = \openssl_digest( $decodedPem, $hashAlgorithm, $rawOutput );
 		if ( false === $result ) {

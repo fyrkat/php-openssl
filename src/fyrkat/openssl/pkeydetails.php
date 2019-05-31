@@ -23,8 +23,14 @@ trait PKeyDetails
 	public function getPublicKeyPem(): string
 	{
 		$details = $this->getDetails();
-		\assert( \array_key_exists( 'key', $details ), 'openssl_pkey_get_details returns array with element "key"' );
-		\assert( \is_string( $details['key'] ), 'openssl_pkey_get_details returns array with element "key" of type string' );
+		\assert(
+				\array_key_exists( 'key', $details ),
+				'openssl_pkey_get_details returns array with element "key"'
+			);
+		\assert(
+				\is_string( $details['key'] ),
+				'openssl_pkey_get_details returns array with element "key" of type string'
+			);
 
 		return $details['key'];
 	}
@@ -39,8 +45,14 @@ trait PKeyDetails
 	public function getBits(): int
 	{
 		$details = $this->getDetails();
-		\assert( \array_key_exists( 'bits', $details ), 'openssl_pkey_get_details returns array with element "bits"' );
-		\assert( \is_int( $details['bits'] ), 'openssl_pkey_get_details returns array with element "bits" of type int' );
+		\assert(
+				\array_key_exists( 'bits', $details ),
+				'openssl_pkey_get_details returns array with element "bits"'
+			);
+		\assert(
+				\is_int( $details['bits'] ),
+				'openssl_pkey_get_details returns array with element "bits" of type int'
+			);
 
 		return $details['bits'];
 	}
@@ -56,8 +68,14 @@ trait PKeyDetails
 	public function getType(): int
 	{
 		$details = $this->getDetails();
-		\assert( \array_key_exists( 'type', $details ), 'openssl_pkey_get_details returns array with element "type"' );
-		\assert( \is_int( $details['type'] ), 'openssl_pkey_get_details returns array with element "type" of type int' );
+		\assert(
+				\array_key_exists( 'type', $details ),
+				'openssl_pkey_get_details returns array with element "type"'
+			);
+		\assert(
+				\is_int( $details['type'] ),
+				'openssl_pkey_get_details returns array with element "type" of type int'
+			);
 
 		return $details['type'];
 	}
@@ -76,7 +94,10 @@ trait PKeyDetails
 		OpenSSLException::flushErrorMessages();
 		$details = \openssl_pkey_get_details( $this->getResource() );
 		/** @psalm-suppress RedundantCondition */
-		\assert( false === $details || \is_array( $details ), 'openssl_pkey_get_details returns array or false' );
+		\assert(
+				false === $details || \is_array( $details ),
+				'openssl_pkey_get_details returns array or false'
+			);
 		if ( false === $details ) {
 			throw new OpenSSLException( 'openssl_pkey_get_details' );
 		}
