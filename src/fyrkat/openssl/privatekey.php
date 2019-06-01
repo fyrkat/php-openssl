@@ -131,15 +131,19 @@ class PrivateKey
 	 * @param ?ConfigArgs $configargs Configuration for overriding the OpenSSL configuration file
 	 *
 	 * @throws OpenSSLException
+	 *
+	 * @psalm-suppress PossiblyNullArgument $passphrase is allowed to be null
+	 * @suppress PhanTypeMismatchArgumentNullableInternal
+	 *
+	 * @see http://github.com/phan/phan/pull/2803
+	 * @see http://github.com/vimeo/psalm/pull/1718
 	 */
 	public function export( string &$output, ?string $passphrase, ConfigArgs $configargs = null ): void
 	{
 		OpenSSLException::flushErrorMessages();
 		if ( null === $configargs ) {
-			/** @psalm-suppress PossiblyNullArgument $passphrase is allowed to be null */
 			$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase );
 		} else {
-			/** @psalm-suppress PossiblyNullArgument $passphrase is allowed to be null */
 			$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase, $configargs->getArray() );
 		}
 		/** @psalm-suppress RedundantCondition */
