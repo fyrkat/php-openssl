@@ -23,7 +23,7 @@ phpunit-7.phar:
 	curl -sSLO https://phar.phpunit.de/phpunit-7.phar || wget https://phar.phpunit.de/phpunit-7.phar
 
 phan.phar:
-	curl -sSLO https://github.com/phan/phan/releases/download/1.3.5/phan.phar || wget https://github.com/phan/phan/releases/download/1.3.5/phan.phar
+	curl -sSLO https://github.com/phan/phan/releases/download/2.1.0/phan.phar || wget https://github.com/phan/phan/releases/download/2.1.0/phan.phar
 
 vendor: composer.phar
 	php composer.phar install

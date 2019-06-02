@@ -81,10 +81,6 @@ class X509
 	 * @throws OpenSSLException
 	 *
 	 * @return bool The certificate can be used for $purpose
-	 *
-	 * @suppress PhanPartialTypeMismatchReturn
-	 *
-	 * @see http://github.com/phan/phan/issues/2812
 	 */
 	public function checkPurpose( int $purpose, array $ca = [], string $untrustedfile = null ): bool
 	{

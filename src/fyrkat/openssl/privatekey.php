@@ -133,9 +133,7 @@ class PrivateKey
 	 * @throws OpenSSLException
 	 *
 	 * @psalm-suppress PossiblyNullArgument $passphrase is allowed to be null
-	 * @suppress PhanTypeMismatchArgumentNullableInternal
 	 *
-	 * @see http://github.com/phan/phan/pull/2803
 	 * @see http://github.com/vimeo/psalm/pull/1718
 	 */
 	public function export( string &$output, ?string $passphrase, ConfigArgs $configargs = null ): void
