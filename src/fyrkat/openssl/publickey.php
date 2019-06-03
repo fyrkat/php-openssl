@@ -46,11 +46,6 @@ class PublicKey extends OpenSSLKey
 		\openssl_free_key( $this->getResource() );
 	}
 
-	public function __toString()
-	{
-		return $this->getPublicKeyPem();
-	}
-
 	/**
 	 * Exports the public key as a string
 	 *

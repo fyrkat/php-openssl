@@ -55,7 +55,7 @@ class PublicKeyTest extends TestCase
 	{
 		// Created using a file path instead of feeding the certificate data
 		$pubkey = new PublicKey( "file://{$this->pubkeyfile}" );
-		$this->assertEquals( $this->pubkey->__toString(), $pubkey->__toString() );
+		$this->assertEquals( $this->pubkey->getPublicKeyPem(), $pubkey->getPublicKeyPem() );
 	}
 
 	public function testConstructorError(): void
