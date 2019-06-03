@@ -17,12 +17,12 @@ class PrivateKey extends OpenSSLKey
 	 * @see http://php.net/manual/en/function.openssl-pkey-get-private.php
 	 * @see http://php.net/manual/en/function.openssl-pkey-new.php
 	 *
-	 * @param null|ConfigArgs|string $keyOrConfig A PEM formatted private key or
-	 *                                            a `file://path/to/file.pem` or
-	 *                                            configuration for a new key or
-	 *                                            null for a new key
-	 * @param ?string                $passphrase  Passphrase used if existing key is encrypted.
-	 *                                            Must be null for new key
+	 * @param null|OpenSSLConfig|string $keyOrConfig A PEM formatted private key or
+	 *                                               a `file://path/to/file.pem` or
+	 *                                               configuration for a new key or
+	 *                                               null for a new key
+	 * @param ?string                   $passphrase  Passphrase used if existing key is encrypted.
+	 *                                               Must be null for new key
 	 *
 	 * @throws OpenSSLException
 	 */
@@ -31,8 +31,8 @@ class PrivateKey extends OpenSSLKey
 		\assert(
 				null === $keyOrConfig
 				|| \is_string( $keyOrConfig )
-				|| $keyOrConfig instanceof ConfigArgs,
-				'PrivateKey constructor expects ConfigArgs, string or null'
+				|| $keyOrConfig instanceof OpenSSLConfig,
+				'PrivateKey constructor expects OpenSSLConfig, string or null'
 			);
 
 		$result = null;
@@ -60,11 +60,11 @@ class PrivateKey extends OpenSSLKey
 				// Create new key without configuration
 
 				$result = \openssl_pkey_new();
-			} elseif ( $keyOrConfig instanceof ConfigArgs ) {
+			} elseif ( $keyOrConfig instanceof OpenSSLConfig ) {
 				// Create new key with configuration
 
 				\assert(
-						null !== $passphrase,
+						null === $passphrase,
 						'PrivateKey cannot have a passphrase when creating a new key'
 					);
 				$result = \openssl_pkey_new( $keyOrConfig->getArray() );
@@ -99,9 +99,9 @@ class PrivateKey extends OpenSSLKey
 	 *
 	 * @see http://php.net/manual/en/function.openssl-pkey-export-to-file.php
 	 *
-	 * @param string      $outputFileName Path to the output file
-	 * @param ?string     $passphrase     Passphrase used to encrypt the output
-	 * @param ?ConfigArgs $configargs     Configuration for overriding the OpenSSL configuration file
+	 * @param string         $outputFileName Path to the output file
+	 * @param ?string        $passphrase     Passphrase used to encrypt the output
+	 * @param ?OpenSSLConfig $configargs     Configuration for overriding the OpenSSL configuration file
 	 *
 	 * @throws OpenSSLException
 	 *
@@ -109,7 +109,7 @@ class PrivateKey extends OpenSSLKey
 	 *
 	 * @see http://github.com/vimeo/psalm/pull/1718
 	 */
-	public function exportToFile( string $outputFileName, ?string $passphrase, ?ConfigArgs $configargs = null ): void
+	public function exportToFile( string $outputFileName, ?string $passphrase, ?OpenSSLConfig $configargs = null ): void
 	{
 		OpenSSLException::flushErrorMessages();
 		if ( null === $configargs ) {
@@ -132,9 +132,9 @@ class PrivateKey extends OpenSSLKey
 	 *
 	 * @see http://php.net/manual/en/function.openssl-pkey-export.php
 	 *
-	 * @param string      $output     Pointer to a string where the output is written
-	 * @param ?string     $passphrase Passphrase used to encrypt the output
-	 * @param ?ConfigArgs $configargs Configuration for overriding the OpenSSL configuration file
+	 * @param string         $output     Pointer to a string where the output is written
+	 * @param ?string        $passphrase Passphrase used to encrypt the output
+	 * @param ?OpenSSLConfig $configargs Configuration for overriding the OpenSSL configuration file
 	 *
 	 * @throws OpenSSLException
 	 *
@@ -142,7 +142,7 @@ class PrivateKey extends OpenSSLKey
 	 *
 	 * @see http://github.com/vimeo/psalm/pull/1718
 	 */
-	public function export( string &$output, ?string $passphrase, ConfigArgs $configargs = null ): void
+	public function export( string &$output, ?string $passphrase, OpenSSLConfig $configargs = null ): void
 	{
 		OpenSSLException::flushErrorMessages();
 		if ( null === $configargs ) {

@@ -9,8 +9,29 @@
 
 namespace fyrkat\openssl;
 
-class ConfigArgs
+class OpenSSLConfig
 {
+	const COMPAT_MODERN = [
+		'digest_alg' => 'SHA256',
+		'private_key_bits' => 2048,
+		'private_key_type' => KeyType::EC,
+		'curve_name' => 'prime256v1',
+	];
+
+	const COMPAT_INTERMEDIATE = [
+		'digest_alg' => 'SHA256',
+		'private_key_bits' => 2048,
+		'private_key_type' => KeyType::RSA,
+		'curve_name' => 'prime256v1',
+	];
+
+	const COMPAT_OLD = [
+		'digest_alg' => 'SHA256',
+		'private_key_bits' => 2048,
+		'private_key_type' => KeyType::RSA,
+		'curve_name' => 'prime256v1',
+	];
+
 	/** @var ?string */
 	private $digestAlg = null;
 
@@ -84,6 +105,35 @@ class ConfigArgs
 				default: \assert( false, "Illegal \$configargs key ${key}" );
 			}
 		}
+	}
+
+	public static function getOpenSSLConfigFilePath(): string
+	{
+		return \implode( \DIRECTORY_SEPARATOR, [__DIR__, 'openssl.cnf'] );
+	}
+
+	public static function caReq( array $compat = self::COMPAT_INTERMEDIATE ): self
+	{
+		return new static( \array_merge( $compat, [
+			'x509_extensions' => 'ca_req',
+			'config' => static::getOpenSSLConfigFilePath(),
+		] ) );
+	}
+
+	public static function clientReq( array $compat = self::COMPAT_INTERMEDIATE ): self
+	{
+		return new static( \array_merge( $compat, [
+			'x509_extensions' => 'client_req',
+			'config' => static::getOpenSSLConfigFilePath(),
+		] ) );
+	}
+
+	public static function serverReq( array $compat = self::COMPAT_INTERMEDIATE ): self
+	{
+		return new static( \array_merge( $compat, [
+			'x509_extensions' => 'server_req',
+			'config' => static::getOpenSSLConfigFilePath(),
+		] ) );
 	}
 
 	/**

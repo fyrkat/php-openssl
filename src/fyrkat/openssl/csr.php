@@ -37,14 +37,14 @@ class CSR
 	 *
 	 * @param DN                   $dn
 	 * @param PrivateKey           $key
-	 * @param ConfigArgs           $configargs
+	 * @param OpenSSLConfig        $configargs
 	 * @param ?array<string,mixed> $extraattribs
 	 *
 	 * @throws OpenSSLException
 	 *
 	 * @return CSR A CSR from the provided key with the provided DN
 	 */
-	public static function generate( DN $dn, PrivateKey $key, ConfigArgs $configargs, array $extraattribs = null ): self
+	public static function generate( DN $dn, PrivateKey $key, OpenSSLConfig $configargs, array $extraattribs = null ): self
 	{
 		$res = $key->getResource();
 		OpenSSLException::flushErrorMessages();
@@ -170,18 +170,18 @@ class CSR
 	 *
 	 * @see http://php.net/manual/en/function.openssl-csr-sign.php
 	 *
-	 * @param ?X509      $ca         The CA certificate used to sign this CSR, null for self-sign
-	 * @param PrivateKey $key        The private key corresponding to $ca (if $ca is null,
-	 *                               use the PrivateKey that was used to generate this CSR)
-	 * @param int        $days       The amount of days this certificate must be valid
-	 * @param ConfigArgs $configargs OpenSSL Configuration for this signing operation
-	 * @param ?int       $serial     Serial number, generate a random one if omitted
+	 * @param ?X509         $ca         The CA certificate used to sign this CSR, null for self-sign
+	 * @param PrivateKey    $key        The private key corresponding to $ca (if $ca is null,
+	 *                                  use the PrivateKey that was used to generate this CSR)
+	 * @param int           $days       The amount of days this certificate must be valid
+	 * @param OpenSSLConfig $configargs OpenSSL Configuration for this signing operation
+	 * @param ?int          $serial     Serial number, generate a random one if omitted
 	 *
 	 * @throws OpenSSLException
 	 *
 	 * @return X509 Certificate
 	 */
-	public function sign( ?X509 $ca, PrivateKey $key, int $days, ConfigArgs $configargs, int $serial = null ): X509
+	public function sign( ?X509 $ca, PrivateKey $key, int $days, OpenSSLConfig $configargs, int $serial = null ): X509
 	{
 		if ( null === $serial ) {
 			/**
