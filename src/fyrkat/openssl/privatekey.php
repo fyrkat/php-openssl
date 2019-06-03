@@ -9,10 +9,8 @@
 
 namespace fyrkat\openssl;
 
-class PrivateKey extends OpenSSLResource
+class PrivateKey extends OpenSSLKey
 {
-	use PKeyDetails;
-
 	/**
 	 * Create a pkey resource and wrap around it
 	 *

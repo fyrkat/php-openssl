@@ -9,7 +9,7 @@
 
 namespace fyrkat\openssl;
 
-trait PKeyDetails
+abstract class OpenSSLKey extends OpenSSLResource
 {
 	/**
 	 * Get a (PEM encoded) string representation of the public key
@@ -102,13 +102,4 @@ trait PKeyDetails
 
 		return $details;
 	}
-
-	/**
-	 * Get the internal OpenSSL resource
-	 *
-	 * @see {OpenSSLResource::getResource()}
-	 *
-	 * @return resource The OpenSSL resource
-	 */
-	abstract public function getResource();
 }
