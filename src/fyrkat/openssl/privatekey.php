@@ -101,12 +101,24 @@ class PrivateKey extends OpenSSLResource
 	 *
 	 * @see http://php.net/manual/en/function.openssl-pkey-export-to-file.php
 	 *
+	 * @param string      $outputFileName Path to the output file
+	 * @param ?string     $passphrase     Passphrase used to encrypt the output
+	 * @param ?ConfigArgs $configargs     Configuration for overriding the OpenSSL configuration file
+	 *
 	 * @throws OpenSSLException
+	 *
+	 * @psalm-suppress PossiblyNullArgument $passphrase is allowed to be null
+	 *
+	 * @see http://github.com/vimeo/psalm/pull/1718
 	 */
-	public function exportToFile( string $outputFileName, string $passphrase, ConfigArgs $configargs ): void
+	public function exportToFile( string $outputFileName, ?string $passphrase, ?ConfigArgs $configargs = null ): void
 	{
 		OpenSSLException::flushErrorMessages();
-		$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase, $configargs->getArray() );
+		if ( null === $configargs ) {
+			$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase );
+		} else {
+			$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase, $configargs->getArray() );
+		}
 		/** @psalm-suppress RedundantCondition */
 		\assert(
 				\is_bool( $result ),
