@@ -20,7 +20,6 @@ class CSR
 	 * @see http://php.net/manual/en/openssl.certparams.php
 	 *
 	 * @param resource|string $csr
-	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 */
 	public function __construct( $csr )
 	{

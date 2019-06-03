@@ -26,7 +26,6 @@ trait ResourceOwner
 
 	/**
 	 * @param resource $resource
-	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 */
 	protected function setResource( $resource ): void
 	{

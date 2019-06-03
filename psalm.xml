@@ -6,4 +6,8 @@
 			<directory name="vendor"/>
 		</ignoreFiles>
 	</projectFiles>
+	<issueHandlers>
+		<!-- We use assertions to enforce the docblocks -->
+		<RedundantConditionGivenDocblockType errorLevel="suppress"/>
+	</issueHandlers>
 </psalm>

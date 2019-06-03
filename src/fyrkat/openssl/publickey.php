@@ -22,7 +22,6 @@ class PublicKey
 	 * @see http://php.net/openssl_pkey_get_public
 	 *
 	 * @param resource|string|X509 $key Resource, file:/{path} or PEM
-	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 *
 	 * @throws OpenSSLException
 	 */

@@ -28,7 +28,6 @@ class PrivateKey
 	 *                                            null for a new key
 	 * @param ?string                $passphrase  Passphrase used if existing key is encrypted.
 	 *                                            Must be null for new key
-	 * @psalm-suppress RedundantConditionGivenDocblockType
 	 *
 	 * @throws OpenSSLException
 	 */
