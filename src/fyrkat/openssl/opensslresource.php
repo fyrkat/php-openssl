@@ -9,7 +9,7 @@
 
 namespace fyrkat\openssl;
 
-trait ResourceOwner
+abstract class OpenSSLResource
 {
 	/**
 	 * @var resource
@@ -17,7 +17,9 @@ trait ResourceOwner
 	private $resource;
 
 	/**
-	 * @return resource
+	 * Get the internal OpenSSL resource
+	 *
+	 * @return resource The OpenSSL resource
 	 */
 	public function getResource()
 	{
@@ -25,6 +27,8 @@ trait ResourceOwner
 	}
 
 	/**
+	 * Set the internal OpenSSL resource
+	 *
 	 * @param resource $resource
 	 */
 	protected function setResource( $resource ): void

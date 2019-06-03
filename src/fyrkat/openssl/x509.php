@@ -9,11 +9,8 @@
 
 namespace fyrkat\openssl;
 
-/** @psalm-suppress PropertyNotSetInConstructor */
-class X509
+class X509 extends OpenSSLResource
 {
-	use ResourceOwner;
-
 	/**
 	 * Create a x.509 resource and wrap around it
 	 *
