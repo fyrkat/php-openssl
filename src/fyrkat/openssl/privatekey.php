@@ -55,7 +55,7 @@ class PrivateKey extends OpenSSLKey
 			if ( false === $result ) {
 				throw new OpenSSLException( 'openssl_pkey_get_private' );
 			}
-		} else /* null or ConfigArgs */ {
+		} else {
 			if ( null === $keyOrConfig ) {
 				// Create new key without configuration
 

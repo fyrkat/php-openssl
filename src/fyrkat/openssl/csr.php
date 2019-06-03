@@ -15,11 +15,11 @@ class CSR
 	private $csr;
 
 	/**
-	 * Construct a CSR object
+	 * Construct a CSR object from an existing CSR-string
 	 *
 	 * @see http://php.net/manual/en/openssl.certparams.php
 	 *
-	 * @param resource|string $csr
+	 * @param resource|string $csr PEM formatted CSR, or file://path to CSR PEM
 	 */
 	public function __construct( $csr )
 	{
@@ -42,7 +42,7 @@ class CSR
 	 *
 	 * @throws OpenSSLException
 	 *
-	 * @return self A CSR from the provided key with the provided DN
+	 * @return CSR A CSR from the provided key with the provided DN
 	 */
 	public static function generate( DN $dn, PrivateKey $key, ConfigArgs $configargs, array $extraattribs = null ): self
 	{
@@ -62,7 +62,7 @@ class CSR
 			throw new OpenSSLException( 'openssl_csr_new' );
 		}
 
-		return new self( $result );
+		return new static( $result );
 	}
 
 	/**
@@ -142,8 +142,6 @@ class CSR
 	 * Returns the subject of the CSR
 	 *
 	 * @see http://php.net/manual/en/function.openssl-csr-get-subject.php
-	 *
-	 * @todo Should return a DN object instead?
 	 *
 	 * @param bool $longNames Whether to use short or long names, e.g. CN or commonName
 	 *

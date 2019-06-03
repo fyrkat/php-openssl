@@ -159,6 +159,8 @@ class X509 extends OpenSSLResource
 	 * @param bool   $rawOutput     TRUE to output raw binary data, or FALSE to output lowercase hexits
 	 *
 	 * @throws OpenSSLException
+	 *
+	 * @return string The fingerprint
 	 */
 	public function fingerprint( string $hashAlgorithm = 'sha1', bool $rawOutput = false ): string
 	{
@@ -180,6 +182,8 @@ class X509 extends OpenSSLResource
 	 * Parse the X.509 certificate
 	 *
 	 * @param bool $longNames Whether to use short or long names, e.g. CN or commonName
+	 *
+	 * @throws OpenSSLException
 	 *
 	 * @return X509Data The parsed data from the certificate
 	 */

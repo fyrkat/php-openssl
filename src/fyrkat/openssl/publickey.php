@@ -52,8 +52,6 @@ class PublicKey extends OpenSSLKey
 	 * @param string &$output String to write PEM encoded CSR in
 	 *
 	 * @throws OpenSSLException
-	 *
-	 * @psalm-suppress ReferenceConstraintViolation
 	 */
 	public function export( string &$output ): void
 	{
@@ -123,7 +121,11 @@ class PublicKey extends OpenSSLKey
 	/**
 	 * Check if a private key corresponds to this certificate
 	 *
+	 * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
+	 *
 	 * @param PrivateKey $key The private key to check against
+	 *
+	 * @throws OpenSSLException
 	 *
 	 * @return bool Returns True if $key is the private key that corresponds to cert, or false otherwise
 	 */

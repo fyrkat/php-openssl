@@ -16,6 +16,8 @@ abstract class OpenSSLKey extends OpenSSLResource
 	 *
 	 * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
 	 *
+	 * @throws OpenSSLException
+	 *
 	 * @return string String starting with -----BEGIN PUBLIC KEY----- and ending with -----EBD PUBLIC KEY-----
 	 */
 	public function getPublicKeyPem(): string
@@ -60,6 +62,8 @@ abstract class OpenSSLKey extends OpenSSLResource
 	 *
 	 * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
 	 * @see {KeyType}
+	 *
+	 * @throws OpenSSLException
 	 *
 	 * @return int The type of the key
 	 */
