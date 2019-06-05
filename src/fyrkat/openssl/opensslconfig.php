@@ -322,10 +322,12 @@ class OpenSSLConfig implements ArrayAccess
 	 *
 	 * @see https://www.php.net/manual/en/function.openssl-csr-new.php
 	 *
-	 * @return ?int how many bits should be used to generate a private key
+	 * @return int how many bits should be used to generate a private key
 	 */
-	public function getPrivateKeyBits(): ?int
+	public function getPrivateKeyBits(): int
 	{
+		\assert( null !== $this->privateKeyBits, 'private_key_bits should never be null' );
+
 		return $this->privateKeyBits;
 	}
 
@@ -338,6 +340,9 @@ class OpenSSLConfig implements ArrayAccess
 	 */
 	public function setPrivateKeyBits( ?int $privateKeyBits ): void
 	{
+		if ( null === $privateKeyBits || $privateKeyBits < 384 ) {
+			throw new DomainException( \sprintf( 'private_key_bits is too small; it needs to be at least 384 bits, not %s', $privateKeyBits ?? 'null' ) );
+		}
 		$this->privateKeyBits = $privateKeyBits;
 	}
 
@@ -346,10 +351,12 @@ class OpenSSLConfig implements ArrayAccess
 	 *
 	 * @see https://www.php.net/manual/en/function.openssl-csr-new.php
 	 *
-	 * @return ?int The type of private key to create, one of OpenSSLKey::KEYTYPES
+	 * @return int The type of private key to create, one of OpenSSLKey::KEYTYPES
 	 */
-	public function getPrivateKeyType(): ?int
+	public function getPrivateKeyType(): int
 	{
+		\assert( null !== $this->privateKeyType, 'private_key_type should never be null' );
+
 		return $this->privateKeyType;
 	}
 
