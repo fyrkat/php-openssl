@@ -13,6 +13,13 @@ use Throwable;
 use ArrayAccess;
 use DomainException;
 
+/**
+ * Class for OpenSSL configuration as used by openssl_* functions
+ *
+ * @see http://php.net/manual/en/function.openssl-csr-new.php
+ * @see http://php.net/manual/en/function.openssl-csr-sign.php
+ * @see http://php.net/manual/en/function.openssl-pkey-new.php
+ */
 class OpenSSLConfig implements ArrayAccess
 {
 	/** @var array Configuration for using an elliptic curve key */
@@ -58,39 +65,43 @@ class OpenSSLConfig implements ArrayAccess
 
 	const CIPHERS = [self::CIPHER_RC2_40, self::CIPHER_RC2_128, self::CIPHER_RC2_64, self::CIPHER_DES, self::CIPHER_3DES, self::CIPHER_AES_128_CBC, self::CIPHER_AES_192_CBC, self::CIPHER_AES_256_CBC];
 
-	/** @var ?string */
+	/** @var ?string hash method used for digest or signature hash */
 	private $digestAlg = null;
 
-	/** @var ?string */
+	/** @var ?string which extensions should be used when creating an x509 certificate */
 	private $x509Extensions = null;
 
-	/** @var ?string */
+	/** @var ?string which extensions should be used when creating a CSR */
 	private $reqExtensions = null;
 
-	/** @var ?int */
+	/** @var ?int bits used to generate a private key */
 	private $privateKeyBits = null;
 
-	/** @var ?int */
+	/** @var ?int type of private key to create */
 	private $privateKeyType = null;
 
-	/** @var ?bool */
+	/** @var ?bool whether the private key must be encrypted with a passphrase */
 	private $encryptKey = null;
 
-	/** @var ?int */
+	/** @var ?int cipher to use for encrypting the private key */
 	private $encryptKeyCipher = null;
 
-	/** @var ?string */
+	/** @var ?string curve to use for elliptic curve calculation */
 	private $curveName = null;
 
-	/** @var ?string */
+	/** @var ?string path to OpenSSL config file */
 	private $config = null;
 
 	/**
 	 * Construct an OpenSSL configuration object
 	 *
+	 * Use one of KEY_EC, KEY_RSA for generating a keypair
+	 * Use one of X509_CA, X509_CLIENT, X509_SERVER for signing
+	 * For making a CSR you can use the default config
+	 *
 	 * @see http://php.net/manual/en/function.openssl-csr-new.php
 	 *
-	 * @param array<string,bool|int|string> $configargs
+	 * @param array<string,bool|int|string> $configargs Config args
 	 */
 	public function __construct( array $configargs = [] )
 	{
@@ -484,18 +495,32 @@ class OpenSSLConfig implements ArrayAccess
 		$this->config = $config;
 	}
 
-	public function offsetexists( $offset ): bool
+	/**
+	 * Check if the provided config argument exists in the configuration array
+	 *
+	 * @param mixed $configArg The config argument to check
+	 *
+	 * @return bool The config argument exists
+	 */
+	public function offsetexists( $configArg ): bool
 	{
 		try {
-			return null !== $this->offsetget( $offset );
+			return null !== $this->offsetget( $configArg );
 		} catch ( Throwable $_ ) {
 			return false;
 		}
 	}
 
-	public function offsetget( $offset )
+	/**
+	 * Get the value of the provided config argument
+	 *
+	 * @param mixed $configArg The config argument to retrieve
+	 *
+	 * @return mixed The value of the config argument
+	 */
+	public function offsetget( $configArg )
 	{
-		switch ( $offset ) {
+		switch ( $configArg ) {
 			case 'digest_alg':return $this->getDigestAlg();
 			case 'x509_extensions':return $this->getX509Extensions();
 			case 'req_extensions':return $this->getReqExtensions();
@@ -509,9 +534,15 @@ class OpenSSLConfig implements ArrayAccess
 		}
 	}
 
-	public function offsetset( $offset, $value ): void
+	/**
+	 * Set the value of the provided config argument
+	 *
+	 * @param mixed $configArg The config argument to set
+	 * @param mixed $value     The new value of the config argument
+	 */
+	public function offsetset( $configArg, $value ): void
 	{
-		switch ( $offset ) {
+		switch ( $configArg ) {
 			case 'digest_alg':$this->setDigestAlg( $value ); break;
 			case 'x509_extensions':$this->setX509Extensions( $value ); break;
 			case 'req_extensions':$this->setReqExtensions( $value ); break;
@@ -524,9 +555,14 @@ class OpenSSLConfig implements ArrayAccess
 		}
 	}
 
-	public function offsetunset( $offset ): void
+	/**
+	 * Unset the value of the provided config argument
+	 *
+	 * @param mixed $configArg The config argument to unset
+	 */
+	public function offsetunset( $configArg ): void
 	{
-		$this->offsetset( $offset, null );
+		$this->offsetset( $configArg, null );
 	}
 
 	/**
