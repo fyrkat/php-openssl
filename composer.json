@@ -1,5 +1,5 @@
 {
-	"name": "fyrkat/x509",
+	"name": "fyrkat/openssl",
 	"description": "Class wrappers for PHPs built-in openssl_* functions",
 	"type": "library",
 	"license": "BSD-3-Clause",
