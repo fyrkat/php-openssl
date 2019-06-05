@@ -104,10 +104,6 @@ class PrivateKey extends OpenSSLKey
 	 * @param ?OpenSSLConfig $configargs     Configuration for overriding the OpenSSL configuration file
 	 *
 	 * @throws OpenSSLException
-	 *
-	 * @psalm-suppress PossiblyNullArgument $passphrase is allowed to be null
-	 *
-	 * @see http://github.com/vimeo/psalm/pull/1718
 	 */
 	public function exportToFile( string $outputFileName, ?string $passphrase, ?OpenSSLConfig $configargs = null ): void
 	{
@@ -137,10 +133,6 @@ class PrivateKey extends OpenSSLKey
 	 * @param ?OpenSSLConfig $configargs Configuration for overriding the OpenSSL configuration file
 	 *
 	 * @throws OpenSSLException
-	 *
-	 * @psalm-suppress PossiblyNullArgument $passphrase is allowed to be null
-	 *
-	 * @see http://github.com/vimeo/psalm/pull/1718
 	 */
 	public function export( string &$output, ?string $passphrase, OpenSSLConfig $configargs = null ): void
 	{
