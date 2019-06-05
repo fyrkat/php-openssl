@@ -9,10 +9,14 @@
 
 namespace fyrkat\openssl\tests;
 
+use DateInterval;
+use DateTimeImmutable;
+
 use fyrkat\openssl\DN;
 use fyrkat\openssl\CSR;
 use fyrkat\openssl\X509;
 use fyrkat\openssl\Purpose;
+
 use fyrkat\openssl\PrivateKey;
 
 use PHPUnit\Framework\TestCase;
@@ -59,5 +63,18 @@ class CATest extends TestCase
 			);
 		$this->assertTrue( $signed->checkPurpose( Purpose::SSL_SERVER, [$this->caFile] ) );
 		$this->assertFalse( $signed->checkPurpose( Purpose::SSL_CLIENT, [$this->caFile] ) );
+	}
+
+	public function testFuture(): void
+	{
+		$future = ( new DateTimeImmutable() )->add( new DateInterval('P1D') );
+		$this->assertSame( 1, CSR::dateToDays( $future ) );
+	}
+
+	public function testPast(): void
+	{
+		$this->expectException( 'DomainException' );
+		$past = ( new DateTimeImmutable() )->sub( new DateInterval('P1D') );
+		CSR::dateToDays( $past );
 	}
 }

@@ -9,6 +9,9 @@
 
 namespace fyrkat\openssl;
 
+use DomainException;
+use DateTimeImmutable;
+
 class CSR
 {
 	/** @var mixed */
@@ -37,15 +40,18 @@ class CSR
 	 *
 	 * @param DN                   $dn
 	 * @param PrivateKey           $key
-	 * @param OpenSSLConfig        $configargs
+	 * @param ?OpenSSLConfig       $configargs
 	 * @param ?array<string,mixed> $extraattribs
 	 *
 	 * @throws OpenSSLException
 	 *
 	 * @return CSR A CSR from the provided key with the provided DN
 	 */
-	public static function generate( DN $dn, PrivateKey $key, OpenSSLConfig $configargs, array $extraattribs = null ): self
+	public static function generate( DN $dn, PrivateKey $key, ?OpenSSLConfig $configargs = null, array $extraattribs = null ): self
 	{
+		if ( null === $configargs ) {
+			$configargs = new OpenSSLConfig();
+		}
 		$res = $key->getResource();
 		OpenSSLException::flushErrorMessages();
 		if ( null === $extraattribs ) {
@@ -63,6 +69,26 @@ class CSR
 		}
 
 		return new static( $result );
+	}
+
+	/**
+	 * Convert date to amount of days in the future, rounded up, from current date
+	 *
+	 * @param DateTimeImmutable $date The object to read the time from
+	 *
+	 * @return int The amount of days in the future
+	 */
+	public static function dateToDays( DateTimeImmutable $date ): int
+	{
+		// We could use (new Date())->diff($date)->d
+		// but we want to round the amount of days up
+		$time = \time();
+		$target = $date->getTimestamp();
+		if ( $time > $target ) {
+			throw new DomainException( 'Provided date is in the past' );
+		}
+
+		return (int)\ceil( ( $target - $time ) / 86400 );
 	}
 
 	/**
@@ -168,21 +194,34 @@ class CSR
 	/**
 	 * Sign a CSR with another certificate (or itself) and generate a certificate
 	 *
-	 * @see http://php.net/manual/en/function.openssl-csr-sign.php
+	 * The validity is in $days from the current date/time.  It may be provided as DateTime,
+	 * but the validity will be rounded up to an integer amount of days from the current date/time,
+	 * due to the way the OpenSSL signing function works in PHP.
 	 *
-	 * @param ?X509         $ca         The CA certificate used to sign this CSR, null for self-sign
-	 * @param PrivateKey    $key        The private key corresponding to $ca (if $ca is null,
-	 *                                  use the PrivateKey that was used to generate this CSR)
-	 * @param int           $days       The amount of days this certificate must be valid
-	 * @param OpenSSLConfig $configargs OpenSSL Configuration for this signing operation
-	 * @param ?int          $serial     Serial number, generate a random one if omitted
+	 * @see http://php.net/manual/en/function.openssl-csr-sign.php
+	 * @see http://php.net/manual/en/function.random-int.php
+	 *
+	 * @param ?X509                 $ca         The CA certificate used to sign this CSR, null for self-sign
+	 * @param PrivateKey            $key        The private key corresponding to $ca (if $ca is null,
+	 *                                          use the PrivateKey that was used to generate this CSR)
+	 * @param DateTimeImmutable|int $validDays  The amount of days this certificate must be valid
+	 * @param OpenSSLConfig         $configargs OpenSSL Configuration for this signing operation
+	 * @param ?int                  $serial     Serial number, generate a random one if omitted
 	 *
 	 * @throws OpenSSLException
+	 * @throws \Exception       an appropriate source of randomness cannot be found
 	 *
 	 * @return X509 Certificate
 	 */
-	public function sign( ?X509 $ca, PrivateKey $key, int $days, OpenSSLConfig $configargs, int $serial = null ): X509
+	public function sign( ?X509 $ca, PrivateKey $key, $validDays, OpenSSLConfig $configargs, int $serial = null ): X509
 	{
+		\assert( \is_int( $validDays ) || $validDays instanceof DateTimeImmutable, '$validDays must be an integer or DateTime' );
+		/** @var int */
+		$days = ( $validDays instanceof DateTimeImmutable )
+			? static::dateToDays( $validDays )
+			: $validDays
+			;
+		\assert( $days > 0, '$validDays > 0' );
 		if ( null === $serial ) {
 			/**
 			 * Not ideal, because the serial must be between 0 and 2^159.
