@@ -18,6 +18,16 @@ namespace fyrkat\openssl;
  */
 abstract class OpenSSLKey extends OpenSSLResource
 {
+	const KEYTYPE_RSA = \OPENSSL_KEYTYPE_RSA;
+
+	const KEYTYPE_DSA = \OPENSSL_KEYTYPE_DSA;
+
+	const KEYTYPE_DH = \OPENSSL_KEYTYPE_DH;
+
+	const KEYTYPE_EC = \OPENSSL_KEYTYPE_EC;
+
+	const KEYTYPES = [self::KEYTYPE_RSA, self::KEYTYPE_EC, self::KEYTYPE_DSA, self::KEYTYPE_DH];
+
 	/**
 	 * Get a (PEM encoded) string representation of the public key
 	 *
@@ -65,10 +75,9 @@ abstract class OpenSSLKey extends OpenSSLResource
 	}
 
 	/**
-	 * Get the type of the key which is one of KeyType::RSA, KeyType::DSA, KeyType::DH, KeyType::EC or KeyType::UNKNOWN
+	 * Get the type of the key which is one of KEYTYPES
 	 *
 	 * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
-	 * @see {KeyType}
 	 *
 	 * @throws OpenSSLException
 	 *

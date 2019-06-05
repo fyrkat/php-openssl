@@ -22,12 +22,12 @@ class PrivateKey extends OpenSSLKey
 	 * @see http://php.net/manual/en/function.openssl-pkey-get-private.php
 	 * @see http://php.net/manual/en/function.openssl-pkey-new.php
 	 *
-	 * @param null|OpenSSLConfig|string $keyOrConfig A PEM formatted private key or
-	 *                                               a `file://path/to/file.pem` or
-	 *                                               configuration for a new key or
-	 *                                               null for a new key
-	 * @param ?string                   $passphrase  Passphrase used if existing key is encrypted.
-	 *                                               Must be null for new key
+	 * @param ?OpenSSLConfig|string $keyOrConfig A PEM formatted private key or
+	 *                                           a `file://path/to/file.pem` or
+	 *                                           configuration for a new key or
+	 *                                           null for a new key
+	 * @param ?string               $passphrase  Passphrase used if existing key is encrypted.
+	 *                                           Must be null for new key
 	 *
 	 * @throws OpenSSLException
 	 */
@@ -40,8 +40,10 @@ class PrivateKey extends OpenSSLKey
 				'PrivateKey constructor expects OpenSSLConfig, string or null'
 			);
 
-		$result = null;
 		OpenSSLException::flushErrorMessages();
+		if ( null === $keyOrConfig ) {
+			$keyOrConfig = new OpenSSLConfig();
+		}
 		if ( \is_string( $keyOrConfig ) ) {
 			// Import existing key
 
@@ -61,19 +63,13 @@ class PrivateKey extends OpenSSLKey
 				throw new OpenSSLException( 'openssl_pkey_get_private' );
 			}
 		} else {
-			if ( null === $keyOrConfig ) {
-				// Create new key without configuration
+			// Create new key with configuration
 
-				$result = \openssl_pkey_new();
-			} elseif ( $keyOrConfig instanceof OpenSSLConfig ) {
-				// Create new key with configuration
-
-				\assert(
-						null === $passphrase,
-						'PrivateKey cannot have a passphrase when creating a new key'
-					);
-				$result = \openssl_pkey_new( $keyOrConfig->getArray() );
-			}
+			\assert(
+					null === $passphrase,
+					'PrivateKey cannot have a passphrase when creating a new key'
+				);
+			$result = \openssl_pkey_new( $keyOrConfig->getArray() );
 
 			/** @psalm-suppress RedundantCondition */
 			\assert(

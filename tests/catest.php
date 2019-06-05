@@ -29,14 +29,12 @@ class CATest extends TestCase
 
 	public function setUp(): void
 	{
-		$this->modernConfig = OpenSSLConfig::caReq( OpenSSLConfig::COMPAT_MODERN );
-		$this->key = new PrivateKey( $this->modernConfig );
-		$csr = CSR::generate(
-				new DN( ['CN' => 'unittest'] ),
-				$this->key,
-				$this->modernConfig
-			);
-		$this->ca = $csr->sign( null, $this->key, 1, $this->modernConfig );
+		$keyConfig = new OpenSSLConfig( OpenSSLConfig::KEY_EC );
+		$caConfig = new OpenSSLConfig( OpenSSLConfig::X509_CA );
+
+		$this->key = new PrivateKey( $keyConfig );
+		$csr = CSR::generate( new DN( ['CN' => 'unittest'] ), $this->key );
+		$this->ca = $csr->sign( null, $this->key, 1, $caConfig );
 		$this->caFile = \tempnam( \sys_get_temp_dir(), 'php_openssl_catest_ca_' );
 		\file_put_contents( $this->caFile, $this->ca );
 	}
@@ -48,14 +46,12 @@ class CATest extends TestCase
 
 	public function testSign(): void
 	{
-		$modernConfig = OpenSSLConfig::serverReq( OpenSSLConfig::COMPAT_MODERN );
-		$key = new PrivateKey( $this->modernConfig );
-		$csr = CSR::generate(
-				new DN( ['CN' => 'example.com'] ),
-				$this->key,
-				$this->modernConfig
-			);
-		$signed = $csr->sign( $this->ca, $this->key, 1, $modernConfig );
+		$keyConfig = new OpenSSLConfig( OpenSSLConfig::KEY_EC );
+		$caConfig = new OpenSSLConfig( OpenSSLConfig::X509_SERVER );
+
+		$key = new PrivateKey( $keyConfig );
+		$csr = CSR::generate( new DN( ['CN' => 'example.com'] ), $this->key );
+		$signed = $csr->sign( $this->ca, $this->key, 1, $caConfig );
 		$this->assertSame(
 				$this->ca->getSubject()->getArray(),
 				$signed->getIssuerSubject()->getArray()
@@ -75,5 +71,12 @@ class CATest extends TestCase
 		$this->expectException( 'DomainException' );
 		$past = ( new DateTimeImmutable() )->sub( new DateInterval('P1D') );
 		CSR::dateToDays( $past );
+	}
+
+	public function testTooFewBitsConfig(): void
+	{
+		$this->expectException( 'DomainException' );
+		$config = new OpenSSLConfig( ['private_key_bits' => 256] );
+		$key = new PrivateKey( $config );
 	}
 }
