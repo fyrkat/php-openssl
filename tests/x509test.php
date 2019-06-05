@@ -9,6 +9,8 @@
 
 namespace fyrkat\openssl\tests;
 
+use DateTimeImmutable;
+
 use fyrkat\openssl\DN;
 use fyrkat\openssl\X509;
 use fyrkat\openssl\Purpose;
@@ -82,24 +84,24 @@ class x509Test extends TestCase
 
 	public function testRawParse(): void
 	{
-		$this->assertEquals( require __DIR__ . '/certs/selfsignedx509-parsed.php', $this->x509->parse()->getRawArray() );
+		$this->assertEquals( require __DIR__ . '/certs/selfsignedx509-parsed.php', $this->x509->parse() );
 	}
 
 	public function testParse(): void
 	{
-		$this->assertSame( 'a30f7f23', $this->x509->parse()->getHash() );
-		$this->assertSame( '17650764870988449858', $this->x509->parse()->getSerialNumber() );
-		$this->assertSame( 'F4F41D21E535C842', $this->x509->parse()->getSerialNumberHex() );
-		$this->assertEquals( new DN( ['CN' => 'fyrkat\x509 test'] ), $this->x509->parse( false )->getSubject() );
-		$this->assertEquals( new DN( ['commonName' => 'fyrkat\x509 test'] ), $this->x509->parse( true )->getSubject() );
-		$this->assertEquals( new DN( ['CN' => 'fyrkat\x509 test'] ), $this->x509->parse( false )->getIssuerSubject() );
-		$this->assertEquals( new DN( ['commonName' => 'fyrkat\x509 test'] ), $this->x509->parse( true )->getIssuerSubject() );
-		$this->assertSame( '/CN=fyrkat\x509 test', $this->x509->parse()->getName() );
-		$this->assertSame( 0, $this->x509->parse()->getVersion() );
-		$this->assertEquals( new \DateTimeImmutable( '2019-01-01 22:51:47' ), $this->x509->parse()->getValidFrom() );
-		$this->assertEquals( new \DateTimeImmutable( '3018-05-04 22:51:47' ), $this->x509->parse()->getValidTo() );
-		$this->assertSame( [1, 2, 3, 4, 5, 6, 7, 8, 9], \array_keys( $this->x509->parse()->getRawPurposes() ) );
-		$this->assertSame( [], $this->x509->parse()->getRawExtensions() );
+		$this->assertSame( 'a30f7f23', $this->x509->getHash() );
+		$this->assertSame( '17650764870988449858', $this->x509->getSerialNumber() );
+		$this->assertSame( 'F4F41D21E535C842', $this->x509->getSerialNumberHex() );
+		$this->assertEquals( new DN( ['CN' => 'fyrkat\x509 test'] ), $this->x509->getSubject( false ) );
+		$this->assertEquals( new DN( ['commonName' => 'fyrkat\x509 test'] ), $this->x509->getSubject( true ) );
+		$this->assertEquals( new DN( ['CN' => 'fyrkat\x509 test'] ), $this->x509->getIssuerSubject( false ) );
+		$this->assertEquals( new DN( ['commonName' => 'fyrkat\x509 test'] ), $this->x509->getIssuerSubject( true ) );
+		$this->assertSame( '/CN=fyrkat\x509 test', $this->x509->getName() );
+		$this->assertSame( 0, $this->x509->getVersion() );
+		$this->assertEquals( new DateTimeImmutable( '2019-01-01 22:51:47' ), $this->x509->getValidFrom() );
+		$this->assertEquals( new DateTimeImmutable( '3018-05-04 22:51:47' ), $this->x509->getValidTo() );
+		$this->assertSame( [1, 2, 3, 4, 5, 6, 7, 8, 9], \array_keys( $this->x509->getRawPurposes() ) );
+		$this->assertSame( [], $this->x509->getRawExtensions() );
 	}
 
 	public function testConstructor(): void

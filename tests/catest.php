@@ -58,8 +58,8 @@ class CATest extends TestCase
 			);
 		$signed = $csr->sign( $this->ca, $this->key, 1, $modernConfig );
 		$this->assertSame(
-				$this->ca->parse()->getSubject()->getArray(),
-				$signed->parse()->getIssuerSubject()->getArray()
+				$this->ca->getSubject()->getArray(),
+				$signed->getIssuerSubject()->getArray()
 			);
 		$this->assertTrue( $signed->checkPurpose( Purpose::SSL_SERVER, [$this->caFile] ) );
 		$this->assertFalse( $signed->checkPurpose( Purpose::SSL_CLIENT, [$this->caFile] ) );

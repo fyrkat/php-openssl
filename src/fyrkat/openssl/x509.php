@@ -9,6 +9,8 @@
 
 namespace fyrkat\openssl;
 
+use DateTimeImmutable;
+
 class X509 extends OpenSSLResource
 {
 	/**
@@ -181,13 +183,15 @@ class X509 extends OpenSSLResource
 	/**
 	 * Parse the X.509 certificate
 	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
 	 * @param bool $longNames Whether to use short or long names, e.g. CN or commonName
 	 *
 	 * @throws OpenSSLException
 	 *
-	 * @return X509Data The parsed data from the certificate
+	 * @return array The parsed data from the certificate
 	 */
-	public function parse( bool $longNames = false ): X509Data
+	public function parse( bool $longNames = false ): array
 	{
 		OpenSSLException::flushErrorMessages();
 		$result = \openssl_x509_parse( $this->getResource(), !$longNames );
@@ -200,6 +204,165 @@ class X509 extends OpenSSLResource
 			throw new OpenSSLException( 'openssl_x509_parse' );
 		}
 
-		return new X509Data( $result, $longNames );
+		return $result;
+	}
+
+	/**
+	 * Get the hash of the certificate
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return string The hash of the certificate
+	 */
+	public function getHash(): string
+	{
+		return $this->parse( false )['hash'];
+	}
+
+	/**
+	 * Get the serial number of the certificate as a numeric string
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return string The serial number of the certificate
+	 */
+	public function getSerialNumber(): string
+	{
+		return $this->parse( false )['serialNumber'];
+	}
+
+	/**
+	 * Get the serial number of the certificate as a HEX string
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return string The serial number of the certificate
+	 */
+	public function getSerialNumberHex(): string
+	{
+		return $this->parse( false )['serialNumberHex'];
+	}
+
+	/**
+	 * Get the subject of the certificate
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return DN The subject of the certificate
+	 */
+	public function getSubject( bool $longNames = false ): DN
+	{
+		return new DN( $this->parse( $longNames )['subject'] );
+	}
+
+	/**
+	 * Get the subject of the issuer (CA)
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return DN The subject of the issuer (CA)
+	 */
+	public function getIssuerSubject( bool $longNames = false ): DN
+	{
+		return new DN( $this->parse( $longNames )['issuer'] );
+	}
+
+	/**
+	 * Get the name of the certificate, this is based on the subject
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return string The name of the certificate
+	 */
+	public function getName(): string
+	{
+		return $this->parse( false )['name'];
+	}
+
+	/**
+	 * Get the version of the certificate
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return int The version of the certificate
+	 */
+	public function getVersion(): int
+	{
+		return $this->parse( false )['version'];
+	}
+
+	/**
+	 * Get the earliest date the certificate is valid
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return DateTimeImmutable Valid from
+	 */
+	public function getValidFrom(): DateTimeImmutable
+	{
+		return new DateTimeImmutable( \sprintf( '@%d', $this->parse( false )['validFrom_time_t'] ) );
+	}
+
+	/**
+	 * Get the latest date the certificate is valid
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return DateTimeImmutable Valid to
+	 */
+	public function getValidTo(): DateTimeImmutable
+	{
+		return new DateTimeImmutable( \sprintf( '@%d', $this->parse( false )['validTo_time_t'] ) );
+	}
+
+	/**
+	 * Get a string representation of the algorithm used to generate the signature
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return string signature algorithm
+	 */
+	public function getSignatureType( bool $longNames = false ): string
+	{
+		return $longNames
+			? $this->parse( true )['signatureTypeLN']
+			: $this->parse( false )['signatureTypeSN']
+			;
+	}
+
+	/**
+	 * Get the numeric ID of the algorithm used to generate the signature
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return int signature algorithm
+	 */
+	public function getSignatureNID(): int
+	{
+		return $this->parse( false )['signatureTypeNID'];
+	}
+
+	/**
+	 * Get the purposes of this certificate
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return array purposes
+	 */
+	public function getRawPurposes(): array
+	{
+		return $this->parse( false )['purposes'];
+	}
+
+	/**
+	 * Get the extensions of this certificate
+	 *
+	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @return array extensions
+	 */
+	public function getRawExtensions(): array
+	{
+		return $this->parse( false )['extensions'];
 	}
 }
