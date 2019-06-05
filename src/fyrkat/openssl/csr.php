@@ -12,9 +12,16 @@ namespace fyrkat\openssl;
 use DomainException;
 use DateTimeImmutable;
 
+/**
+ * Wrapper class around a CSR variable
+ *
+ * This class provides functions parallel to openssl_pkey_*.
+ */
 class CSR
 {
-	/** @var mixed */
+	/**
+	 * @var resource|string The CSR variable
+	 */
 	private $csr;
 
 	/**

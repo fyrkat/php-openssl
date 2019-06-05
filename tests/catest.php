@@ -15,7 +15,6 @@ use DateTimeImmutable;
 use fyrkat\openssl\DN;
 use fyrkat\openssl\CSR;
 use fyrkat\openssl\X509;
-use fyrkat\openssl\Purpose;
 
 use fyrkat\openssl\PrivateKey;
 
@@ -61,8 +60,8 @@ class CATest extends TestCase
 				$this->ca->getSubject()->getArray(),
 				$signed->getIssuerSubject()->getArray()
 			);
-		$this->assertTrue( $signed->checkPurpose( Purpose::SSL_SERVER, [$this->caFile] ) );
-		$this->assertFalse( $signed->checkPurpose( Purpose::SSL_CLIENT, [$this->caFile] ) );
+		$this->assertTrue( $signed->checkPurpose( X509::PURPOSE_SSL_SERVER, [$this->caFile] ) );
+		$this->assertFalse( $signed->checkPurpose( X509::PURPOSE_SSL_CLIENT, [$this->caFile] ) );
 	}
 
 	public function testFuture(): void

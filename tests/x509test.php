@@ -13,8 +13,6 @@ use DateTimeImmutable;
 
 use fyrkat\openssl\DN;
 use fyrkat\openssl\X509;
-use fyrkat\openssl\Purpose;
-use fyrkat\openssl\PublicKey;
 use fyrkat\openssl\PrivateKey;
 
 use PHPUnit\Framework\TestCase;
@@ -79,7 +77,7 @@ class x509Test extends TestCase
 
 	public function testCheckPurpose(): void
 	{
-		$this->assertTrue( $this->x509->checkPurpose( Purpose::ANY, [$this->x509File] ) );
+		$this->assertTrue( $this->x509->checkPurpose( X509::PURPOSE_ANY, [$this->x509File] ) );
 	}
 
 	public function testRawParse(): void

@@ -12,15 +12,25 @@ namespace fyrkat\openssl;
 use Exception;
 use Throwable;
 
+/**
+ * Exception class that, when instantiated, will consume all queued error
+ * messages for OpenSSL and show them when printing a stacktrace.
+ *
+ * @see http://php.net/manual/en/function.openssl-error-string.php
+ */
 class OpenSSLException extends Exception
 {
-	/** @var string[] */
+	/** @var string[] Error messages from openssl_error_string() */
 	private $errorMessages = [];
 
-	/** @var ?string */
+	/** @var ?string The last openssl_* function called */
 	private $functionName = null;
 
 	/**
+	 * Construct a new OpenSSL exception and consume error messages
+	 *
+	 * @see http://php.net/manual/en/function.openssl-error-string.php
+	 *
 	 * @param ?string    $functionName
 	 * @param ?Throwable $previous
 	 */

@@ -11,8 +11,27 @@ namespace fyrkat\openssl;
 
 use DateTimeImmutable;
 
+/**
+ * Wrapper class around a public key resource
+ *
+ * This class provides functions parallel to openssl_x509_*.
+ */
 class X509 extends OpenSSLResource
 {
+	const PURPOSE_SSL_CLIENT = \X509_PURPOSE_SSL_CLIENT;
+
+	const PURPOSE_SSL_SERVER = \X509_PURPOSE_SSL_SERVER;
+
+	const PURPOSE_NS_SSL_SERVER = \X509_PURPOSE_NS_SSL_SERVER;
+
+	const PURPOSE_SMIME_SIGN = \X509_PURPOSE_SMIME_SIGN;
+
+	const PURPOSE_SMIME_ENCRYPT = \X509_PURPOSE_SMIME_ENCRYPT;
+
+	const PURPOSE_CRL_SIGN = \X509_PURPOSE_CRL_SIGN;
+
+	const PURPOSE_ANY = \X509_PURPOSE_ANY;
+
 	/**
 	 * Create a x.509 resource and wrap around it
 	 *
@@ -44,7 +63,14 @@ class X509 extends OpenSSLResource
 		\openssl_x509_free( $this->getResource() );
 	}
 
-	public function __toString()
+	/**
+	 * Get the certificate as a PEM string
+	 *
+	 * @see $this->export(string)
+	 *
+	 * @return string
+	 */
+	public function __toString(): string
 	{
 		$out = '';
 		$this->export( $out, false );
@@ -73,7 +99,7 @@ class X509 extends OpenSSLResource
 	 * @see http://php.net/manual/en/openssl.cert.verification.php
 	 * @see Purpose
 	 *
-	 * @param int           $purpose       See {Purpose}
+	 * @param int           $purpose       Any PURPOSE_ value
 	 * @param array<string> $ca            File and directory names that specify the locations of trusted CA files
 	 * @param ?string       $untrustedfile PEM encoded file holding certificates that can be used to help verify this certificate
 	 *
@@ -114,6 +140,9 @@ class X509 extends OpenSSLResource
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-export-to-file.php
 	 *
+	 * @param string $outputFileName Path to the output file
+	 * @param bool   $withText       Add additional human-readable information
+	 *
 	 * @throws OpenSSLException
 	 */
 	public function exportToFile( string $outputFileName, bool $withText = false ): void
@@ -134,6 +163,9 @@ class X509 extends OpenSSLResource
 	 * Export a certificate as a string
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-export.php
+	 *
+	 * @param string &$output  String to write PEM encoded X509 certificate in
+	 * @param bool   $withText Add additional human-readable information
 	 *
 	 * @throws OpenSSLException
 	 */
@@ -258,6 +290,8 @@ class X509 extends OpenSSLResource
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
 	 *
+	 * @param bool $longNames Whether to use short or long names, e.g. CN or commonName
+	 *
 	 * @return DN The subject of the certificate
 	 */
 	public function getSubject( bool $longNames = false ): DN
@@ -269,6 +303,8 @@ class X509 extends OpenSSLResource
 	 * Get the subject of the issuer (CA)
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @param bool $longNames Whether to use short or long names, e.g. CN or commonName
 	 *
 	 * @return DN The subject of the issuer (CA)
 	 */
@@ -329,6 +365,8 @@ class X509 extends OpenSSLResource
 	 * Get a string representation of the algorithm used to generate the signature
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-parse.php
+	 *
+	 * @param bool $longNames Whether to use short or long names, e.g. CN or commonName
 	 *
 	 * @return string signature algorithm
 	 */

@@ -9,6 +9,11 @@
 
 namespace fyrkat\openssl;
 
+/**
+ * Wrapper class around a private key resource
+ *
+ * This class provides functions parallel to openssl_pkey_*.
+ */
 class PrivateKey extends OpenSSLKey
 {
 	/**

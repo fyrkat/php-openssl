@@ -9,10 +9,15 @@
 
 namespace fyrkat\openssl;
 
+/**
+ * Common class for wrapping around OpenSSL resources
+ *
+ * The class provides getResource() and setResource(resource).
+ */
 abstract class OpenSSLResource
 {
 	/**
-	 * @var resource
+	 * @var resource An OpenSSL resource
 	 */
 	private $resource;
 

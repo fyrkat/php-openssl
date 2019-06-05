@@ -9,6 +9,13 @@
 
 namespace fyrkat\openssl;
 
+/**
+ * Wrapper for any resource that can be used with openssl_pkey_get_details()
+ *
+ * This class can wrap around any public key or private key.
+ *
+ * @see http://php.net/manual/en/function.openssl-pkey-get-details.php
+ */
 abstract class OpenSSLKey extends OpenSSLResource
 {
 	/**
