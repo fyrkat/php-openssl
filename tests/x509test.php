@@ -70,7 +70,7 @@ class x509Test extends TestCase
 
 	public function testPublicKey(): void
 	{
-		$key = new PublicKey( $this->x509 );
+		$key = $this->x509->getPublicKey();
 		$details = $key->getDetails();
 		$this->assertSame( $this->pubKeyPem, $details['key'] );
 		$this->assertSame( ['bits', 'key', 'rsa', 'type'], \array_keys( $details ) );

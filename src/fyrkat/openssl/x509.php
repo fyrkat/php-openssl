@@ -152,6 +152,16 @@ class X509 extends OpenSSLResource
 	}
 
 	/**
+	 * Get the public key associated with this certificate
+	 *
+	 * @return PublicKey the public key associated with this certificate
+	 */
+	public function getPublicKey(): PublicKey
+	{
+		return new PublicKey( $this );
+	}
+
+	/**
 	 * Calculate the fingerprint, or digest, of the X.509 certificate
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-fingerprint.php
