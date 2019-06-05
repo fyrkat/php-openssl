@@ -1,9 +1,8 @@
-x509:
 
 camera-ready: syntax codestyle phpunit psalm phan
 
 clean:
-	rm -rf composer.phar php-cs-fixer-v2.phar phpDocumentor.phar psalm.phar vendor phpdoc dev
+	rm -rf composer.phar php-cs-fixer-v2.phar phpDocumentor.phar psalm.phar phpunit-7.phar vendor phpdoc dev
 
 test: syntax phpunit
 
@@ -28,7 +27,9 @@ phan.phar:
 vendor: composer.phar
 	php composer.phar install
 
-psalm: psalm.phar vendor
+psalm: psalm.phar
+	mkdir -p vendor
+	ln -s ../src/_autoload.php vendor/autoload.php || true
 	php psalm.phar
 
 phan: phan.phar
@@ -39,6 +40,9 @@ codestyle: php-cs-fixer-v2.phar
 
 phpunit: phpunit-7.phar
 	php phpunit-7.phar
+
+phpdoc: phpDocumentor.phar
+	php phpDocumentor.phar --directory=src --target=phpdoc
 
 syntax:
 	find . ! -path './vendor/*' -name \*.php -print0 | xargs -0 -n1 php -l

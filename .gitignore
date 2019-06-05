@@ -1,7 +1,9 @@
 /composer.lock
 /composer.phar
+/phpDocumentor.phar
 /phan.phar
 /php-cs-fixer-v2.phar
+/phpdoc
 /phpunit-7.phar
 /psalm.phar
 /vendor
