@@ -72,10 +72,7 @@ class X509 extends OpenSSLResource
 	 */
 	public function __toString(): string
 	{
-		$out = '';
-		$this->export( $out, false );
-
-		return $out;
+		return $this->getX509Pem();
 	}
 
 	/**

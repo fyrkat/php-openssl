@@ -52,6 +52,18 @@ class PublicKey extends OpenSSLKey
 	}
 
 	/**
+	 * Get the public key as a PEM string
+	 *
+	 * @see $this->export(string)
+	 *
+	 * @return string
+	 */
+	public function __toString(): string
+	{
+		return $this->getPublicKeyPem();
+	}
+
+	/**
 	 * Exports the public key as a string
 	 *
 	 * @param string &$output String to write PEM encoded CSR in
