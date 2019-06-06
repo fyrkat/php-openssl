@@ -228,7 +228,12 @@ class CSR
 			? static::dateToDays( $validDays )
 			: $validDays
 			;
-		\assert( $days > 0, '$validDays > 0' );
+		if ( $days <= 0 ) {
+			throw new DomainException( '$validDays must be a positive integer' );
+		}
+		if ( $ca !== null && !$ca->checkPrivateKey( $key ) ) {
+			throw new DomainException( 'PrivateKey $key must match the PublicKey from $ca' );
+		}
 		if ( null === $serial ) {
 			/**
 			 * Not ideal, because the serial must be between 0 and 2^159.
