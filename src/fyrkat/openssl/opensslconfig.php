@@ -105,6 +105,9 @@ class OpenSSLConfig implements ArrayAccess
 	 */
 	public function __construct( array $configargs = [] )
 	{
+		if ( !\array_key_exists( 'digest_alg', $configargs ) ) {
+			$configargs['digest_alg'] = 'sha256';
+		}
 		if ( !\array_key_exists( 'private_key_type', $configargs ) ) {
 			$configargs['private_key_type'] = OpenSSLKey::KEYTYPE_RSA;
 		}
