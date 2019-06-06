@@ -2,6 +2,14 @@
 prompt                 = no
 distinguished_name     = dn
 
+# The following options are set in OpenSSLConfig.php
+# The default values are displayed here
+#default_md            = sha256
+#x509_extensions       =
+#req_extensions        =
+#default_bits          = 2048
+#encrypt_key           = no
+
 [dn]
 
 [ x509_ca ]

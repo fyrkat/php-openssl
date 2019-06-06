@@ -15,7 +15,7 @@ use DateTimeImmutable;
 use fyrkat\openssl\DN;
 use fyrkat\openssl\CSR;
 use fyrkat\openssl\X509;
-
+use fyrkat\openssl\OpenSSLKey;
 use fyrkat\openssl\PrivateKey;
 
 use PHPUnit\Framework\TestCase;
@@ -29,12 +29,12 @@ class CATest extends TestCase
 
 	public function setUp(): void
 	{
-		$keyConfig = new OpenSSLConfig( OpenSSLConfig::KEY_EC );
 		$caConfig = new OpenSSLConfig( OpenSSLConfig::X509_CA );
 
-		$this->key = new PrivateKey( $keyConfig );
-		$csr = CSR::generate( new DN( ['CN' => 'unittest'] ), $this->key );
-		$this->ca = $csr->sign( null, $this->key, 1, $caConfig );
+		$this->ecKey = new PrivateKey( new OpenSSLConfig( OpenSSLConfig::KEY_EC ) );
+		$this->rsaKey = new PrivateKey( new OpenSSLConfig( OpenSSLConfig::KEY_RSA ) );
+		$csr = CSR::generate( new DN( ['CN' => 'unittest'] ), $this->ecKey );
+		$this->ca = $csr->sign( null, $this->ecKey, 1, $caConfig );
 		$this->caFile = \tempnam( \sys_get_temp_dir(), 'php_openssl_catest_ca_' );
 		\file_put_contents( $this->caFile, $this->ca );
 	}
@@ -44,14 +44,30 @@ class CATest extends TestCase
 		\unlink( $this->caFile );
 	}
 
+	public function testECConfig(): void
+	{
+		$csr = CSR::generate( new DN( ['CN' => 'example.com'] ), $this->ecKey );
+		$x509 = $csr->sign( null, $this->ecKey, 1, new OpenSSLConfig( OpenSSLConfig::X509_SERVER ) );
+		$this->assertSame( OpenSSLKey::KEYTYPE_EC, $x509->getPublicKey()->getType() );
+		$this->assertSame( 256, $x509->getPublicKey()->getBits() );
+		$this->assertSame( 'ecdsa-with-SHA256', $x509->getSignatureType() );
+	}
+
+	public function testRSAConfig(): void
+	{
+		$csr = CSR::generate( new DN( ['CN' => 'example.com'] ), $this->rsaKey );
+		$x509 = $csr->sign( null, $this->rsaKey, 1, new OpenSSLConfig( OpenSSLConfig::X509_SERVER ) );
+		$this->assertSame( OpenSSLKey::KEYTYPE_RSA, $x509->getPublicKey()->getType() );
+		$this->assertSame( 2048, $x509->getPublicKey()->getBits() );
+		$this->assertSame( 'RSA-SHA256', $x509->getSignatureType() );
+	}
+
 	public function testSign(): void
 	{
-		$keyConfig = new OpenSSLConfig( OpenSSLConfig::KEY_EC );
 		$caConfig = new OpenSSLConfig( OpenSSLConfig::X509_SERVER );
 
-		$key = new PrivateKey( $keyConfig );
-		$csr = CSR::generate( new DN( ['CN' => 'example.com'] ), $this->key );
-		$signed = $csr->sign( $this->ca, $this->key, 1, $caConfig );
+		$csr = CSR::generate( new DN( ['CN' => 'example.com'] ), $this->ecKey );
+		$signed = $csr->sign( $this->ca, $this->ecKey, 1, $caConfig );
 		$this->assertSame(
 				$this->ca->getSubject()->getArray(),
 				$signed->getIssuerSubject()->getArray()
