@@ -208,8 +208,8 @@ class CSR
 	 * @see http://php.net/manual/en/function.openssl-csr-sign.php
 	 * @see http://php.net/manual/en/function.random-int.php
 	 *
-	 * @param ?X509                 $ca         The CA certificate used to sign this CSR, null for self-sign
-	 * @param PrivateKey            $key        The private key corresponding to $ca (if $ca is null,
+	 * @param ?X509                 $issuerCA   The CA certificate used to sign this CSR, null for self-sign
+	 * @param PrivateKey            $issuerKey  The private key corresponding to $issuerCA (if $issuerCA is null,
 	 *                                          use the PrivateKey that was used to generate this CSR)
 	 * @param DateTimeImmutable|int $validDays  The amount of days this certificate must be valid
 	 * @param OpenSSLConfig         $configargs OpenSSL Configuration for this signing operation
@@ -220,7 +220,7 @@ class CSR
 	 *
 	 * @return X509 Certificate
 	 */
-	public function sign( ?X509 $ca, PrivateKey $key, $validDays, OpenSSLConfig $configargs, int $serial = null ): X509
+	public function sign( ?X509 $issuerCA, PrivateKey $issuerKey, $validDays, OpenSSLConfig $configargs, int $serial = null ): X509
 	{
 		\assert( \is_int( $validDays ) || $validDays instanceof DateTimeImmutable, '$validDays must be an integer or DateTime' );
 		/** @var int */
@@ -231,8 +231,8 @@ class CSR
 		if ( $days <= 0 ) {
 			throw new DomainException( '$validDays must be a positive integer' );
 		}
-		if ( $ca !== null && !$ca->checkPrivateKey( $key ) ) {
-			throw new DomainException( 'PrivateKey $key must match the PublicKey from $ca' );
+		if ( null !== $issuerCA && !$issuerCA->checkPrivateKey( $issuerKey ) ) {
+			throw new DomainException( 'PrivateKey $issuerKey must match the PublicKey from $issuerCA' );
 		}
 		if ( null === $serial ) {
 			/**
@@ -245,10 +245,10 @@ class CSR
 			 */
 			$serial = \random_int( 0, \PHP_INT_MAX );
 		}
-		$cacert = null === $ca ? null : $ca->getResource();
-		$privKey = $key->getResource();
+		$issuerCertResource = null === $issuerCA ? null : $issuerCA->getResource();
+		$issuerKeyResource = $issuerKey->getResource();
 		OpenSSLException::flushErrorMessages();
-		$result = \openssl_csr_sign( $this->csr, $cacert, $privKey, $days, $configargs->getArray(), $serial );
+		$result = \openssl_csr_sign( $this->csr, $issuerCertResource, $issuerKeyResource, $days, $configargs->getArray(), $serial );
 		/** @psalm-suppress RedundantCondition */
 		\assert(
 				false === $result || \is_resource( $result ),
