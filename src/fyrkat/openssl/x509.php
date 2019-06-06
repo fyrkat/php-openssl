@@ -250,6 +250,23 @@ class X509 extends OpenSSLResource
 	}
 
 	/**
+	 * Get the X.509 PEM
+	 *
+	 * @param bool $withText Add additional human-readable information
+	 *
+	 * @throws OpenSSLException
+	 *
+	 * @return string PEM encoded X.509 certificate
+	 */
+	public function getX509Pem( bool $withText = false )
+	{
+		$result = '';
+		$this->export( $result, $withText );
+
+		return $result;
+	}
+
+	/**
 	 * Get the hash of the certificate
 	 *
 	 * @see http://php.net/manual/en/function.openssl-x509-parse.php

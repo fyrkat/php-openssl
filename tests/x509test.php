@@ -55,9 +55,7 @@ class x509Test extends TestCase
 
 	public function testExport(): void
 	{
-		$out = '';
-		$this->x509->export( $out );
-		$this->assertSame( $this->x509Pem, $out );
+		$this->assertSame( $this->x509Pem, $this->x509->getX509Pem() );
 	}
 
 	public function testFingerprint(): void

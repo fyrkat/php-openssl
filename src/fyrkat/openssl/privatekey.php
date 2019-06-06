@@ -101,7 +101,7 @@ class PrivateKey extends OpenSSLKey
 	 * @see http://php.net/manual/en/function.openssl-pkey-export-to-file.php
 	 *
 	 * @param string         $outputFileName Path to the output file
-	 * @param ?string        $passphrase     Passphrase used to encrypt the output
+	 * @param ?string        $passphrase     Passphrase used to encrypt the output (null for unencrypted key)
 	 * @param ?OpenSSLConfig $configargs     Configuration for overriding the OpenSSL configuration file
 	 *
 	 * @throws OpenSSLException
@@ -110,10 +110,9 @@ class PrivateKey extends OpenSSLKey
 	{
 		OpenSSLException::flushErrorMessages();
 		if ( null === $configargs ) {
-			$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase );
-		} else {
-			$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase, $configargs->getArray() );
+			$configargs = new OpenSSLConfig();
 		}
+		$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase, $configargs->getArray() );
 		/** @psalm-suppress RedundantCondition */
 		\assert(
 				\is_bool( $result ),
@@ -129,8 +128,8 @@ class PrivateKey extends OpenSSLKey
 	 *
 	 * @see http://php.net/manual/en/function.openssl-pkey-export.php
 	 *
-	 * @param string         $output     Pointer to a string where the output is written
-	 * @param ?string        $passphrase Passphrase used to encrypt the output
+	 * @param string         &$output    Pointer to a string where the output is written
+	 * @param ?string        $passphrase Passphrase used to encrypt the output (null for unencrypted key)
 	 * @param ?OpenSSLConfig $configargs Configuration for overriding the OpenSSL configuration file
 	 *
 	 * @throws OpenSSLException
@@ -139,10 +138,9 @@ class PrivateKey extends OpenSSLKey
 	{
 		OpenSSLException::flushErrorMessages();
 		if ( null === $configargs ) {
-			$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase );
-		} else {
-			$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase, $configargs->getArray() );
+			$configargs = new OpenSSLConfig();
 		}
+		$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase, $configargs->getArray() );
 		/** @psalm-suppress RedundantCondition */
 		\assert(
 				\is_bool( $result ),
@@ -151,6 +149,24 @@ class PrivateKey extends OpenSSLKey
 		if ( false === $result ) {
 			throw new OpenSSLException( 'openssl_pkey_export' );
 		}
+	}
+
+	/**
+	 * Get a PEM string of the private key, optionally encrypted
+	 *
+	 * @param ?string        $passphrase Passphrase used to encrypt the output (null for unencrypted key)
+	 * @param ?OpenSSLConfig $configargs Configuration for overriding the OpenSSL configuration file
+	 *
+	 * @throws OpenSSLException
+	 *
+	 * @return string PEM-encoded private key
+	 */
+	public function getPrivateKeyPem( ?string $passphrase, ?OpenSSLConfig $configargs = null ): string
+	{
+		$result = '';
+		$this->export( $result, $passphrase, $configargs );
+
+		return $result;
 	}
 
 	/**

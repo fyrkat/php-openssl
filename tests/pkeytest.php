@@ -72,10 +72,6 @@ class PublicKeyTest extends TestCase
 	public function testExtractPublicKey(): void
 	{
 		$pubkey = $this->privkey->getPublicKey();
-		$pem1 = '';
-		$pem2 = '';
-		$this->pubkey->export( $pem1 );
-		$pubkey->export( $pem2 );
-		$this->assertSame( $pem1, $pem2 );
+		$this->assertSame( $this->pubkey->getPublicKeyPem(), $pubkey->getPublicKeyPem() );
 	}
 }
