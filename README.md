@@ -14,6 +14,14 @@ in progress.  Patches and bug reports welcome.
 
 ## Usage
 
+Make sure that you use
+[strict types](https://www.php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration.strict)
+in your code!
+
+```php
+<?php declare(strict_types=1);
+```
+
 ### Self-sign
 
 In order to make a self-signed CA, you need a key.
