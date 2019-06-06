@@ -10,7 +10,7 @@
 namespace fyrkat\openssl;
 
 use DomainException;
-use DateTimeImmutable;
+use DateTimeInterface;
 
 /**
  * Wrapper class around a CSR variable
@@ -81,11 +81,11 @@ class CSR
 	/**
 	 * Convert date to amount of days in the future, rounded up, from current date
 	 *
-	 * @param DateTimeImmutable $date The object to read the time from
+	 * @param DateTimeInterface $date The object to read the time from
 	 *
 	 * @return int The amount of days in the future
 	 */
-	public static function dateToDays( DateTimeImmutable $date ): int
+	public static function dateToDays( DateTimeInterface $date ): int
 	{
 		// We could use (new Date())->diff($date)->d
 		// but we want to round the amount of days up
@@ -201,7 +201,7 @@ class CSR
 	/**
 	 * Sign a CSR with another certificate (or itself) and generate a certificate
 	 *
-	 * The validity is in $days from the current date/time.  It may be provided as DateTime,
+	 * The validity is in $days from the current date/time.  It may be provided as DateTimeInterface,
 	 * but the validity will be rounded up to an integer amount of days from the current date/time,
 	 * due to the way the OpenSSL signing function works in PHP.
 	 *
@@ -211,7 +211,7 @@ class CSR
 	 * @param ?X509                 $issuerCA   The CA certificate used to sign this CSR, null for self-sign
 	 * @param PrivateKey            $issuerKey  The private key corresponding to $issuerCA (if $issuerCA is null,
 	 *                                          use the PrivateKey that was used to generate this CSR)
-	 * @param DateTimeImmutable|int $validDays  The amount of days this certificate must be valid
+	 * @param DateTimeInterface|int $validDays  The amount of days this certificate must be valid
 	 * @param OpenSSLConfig         $configargs OpenSSL Configuration for this signing operation
 	 * @param ?int                  $serial     Serial number, generate a random one if omitted
 	 *
@@ -222,9 +222,9 @@ class CSR
 	 */
 	public function sign( ?X509 $issuerCA, PrivateKey $issuerKey, $validDays, OpenSSLConfig $configargs, int $serial = null ): X509
 	{
-		\assert( \is_int( $validDays ) || $validDays instanceof DateTimeImmutable, '$validDays must be an integer or DateTime' );
+		\assert( \is_int( $validDays ) || $validDays instanceof DateTimeInterface, '$validDays must be an integer or DateTimeInterface' );
 		/** @var int */
-		$days = ( $validDays instanceof DateTimeImmutable )
+		$days = ( $validDays instanceof DateTimeInterface )
 			? static::dateToDays( $validDays )
 			: $validDays
 			;
