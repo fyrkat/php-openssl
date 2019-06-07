@@ -9,9 +9,6 @@
 
 namespace fyrkat\openssl\tests;
 
-use DateInterval;
-use DateTimeImmutable;
-
 use fyrkat\openssl\CSR;
 use fyrkat\openssl\DN;
 use fyrkat\openssl\OpenSSLConfig;
@@ -73,25 +70,5 @@ class CATest extends TestCase
 			);
 		$this->assertTrue( $signed->checkPurpose( X509::PURPOSE_SSL_SERVER, [$this->caFile] ) );
 		$this->assertFalse( $signed->checkPurpose( X509::PURPOSE_SSL_CLIENT, [$this->caFile] ) );
-	}
-
-	public function testFuture(): void
-	{
-		$future = ( new DateTimeImmutable() )->add( new DateInterval('P1D') );
-		$this->assertSame( 1, CSR::dateToDays( $future ) );
-	}
-
-	public function testPast(): void
-	{
-		$this->expectException( 'DomainException' );
-		$past = ( new DateTimeImmutable() )->sub( new DateInterval('P1D') );
-		CSR::dateToDays( $past );
-	}
-
-	public function testTooFewBitsConfig(): void
-	{
-		$this->expectException( 'DomainException' );
-		$config = new OpenSSLConfig( ['private_key_bits' => 256] );
-		$key = new PrivateKey( $config );
 	}
 }
