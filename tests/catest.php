@@ -29,7 +29,14 @@ class CATest extends TestCase
 
 		$this->ecKey = new PrivateKey( new OpenSSLConfig( OpenSSLConfig::KEY_EC ) );
 		$this->rsaKey = new PrivateKey( new OpenSSLConfig( OpenSSLConfig::KEY_RSA ) );
-		$csr = CSR::generate( new DN( ['CN' => 'unittest'] ), $this->ecKey );
+		$csr = CSR::generate(
+				(new DN())
+					->setCommonName('unittest')
+					->setCountryName('NO')
+					->setOrganizationName('fyrkat')
+					->setEmailAddress('test@example.com'),
+				$this->ecKey
+			);
 		$this->ca = $csr->sign( null, $this->ecKey, 1, $caConfig );
 		$this->caFile = \tempnam( \sys_get_temp_dir(), 'php_openssl_catest_ca_' );
 		\file_put_contents( $this->caFile, $this->ca );
@@ -38,6 +45,11 @@ class CATest extends TestCase
 	public function tearDown(): void
 	{
 		\unlink( $this->caFile );
+	}
+
+	public function testCASubject(): void
+	{
+		$this->assertSame( 'emailAddress=test@example.com, O=fyrkat, C=NO, CN=unittest', (string)$this->ca->getSubject() );
 	}
 
 	public function testECConfig(): void
@@ -62,7 +74,7 @@ class CATest extends TestCase
 	{
 		$caConfig = new OpenSSLConfig( OpenSSLConfig::X509_SERVER );
 
-		$csr = CSR::generate( new DN( ['CN' => 'example.com'] ), $this->ecKey );
+		$csr = CSR::generate( new DN( ['CN' => 'example.com/'] ), $this->ecKey );
 		$signed = $csr->sign( $this->ca, $this->ecKey, 1, $caConfig );
 		$this->assertSame(
 				$this->ca->getSubject()->toArray(),

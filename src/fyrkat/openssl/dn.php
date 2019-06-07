@@ -9,9 +9,7 @@
 
 namespace fyrkat\openssl;
 
-use ArrayIterator;
-use Iterator;
-use IteratorAggregate;
+use DomainException;
 
 /**
  * Wrapper class around DN arrays
@@ -21,8 +19,17 @@ use IteratorAggregate;
  *
  * @see http://php.net/manual/en/function.openssl-csr-new.php
  */
-class DN implements IteratorAggregate
+class DN
 {
+	const TRANSLATE_LONG = [
+		'countryName' => 'C',
+		'stateOrProvinceName' => 'ST',
+		'localityName' => 'L',
+		'organizationName' => 'O',
+		'organizationalUnitName' => 'OU',
+		'commonName' => 'CN',
+	];
+
 	/**
 	 * @var array<string,string|array<string>> Internal DN array
 	 */
@@ -33,8 +40,18 @@ class DN implements IteratorAggregate
 	 *
 	 * @param array<string,string|array<string>> $dn
 	 */
-	public function __construct( array $dn )
+	public function __construct( array $dn = [] )
 	{
+		foreach ( $dn as $key => $value ) {
+			/** @psalm-suppress DocblockTypeContradiction */
+			if ( !\is_string( $key ) ) {
+				throw new DomainException( 'DN array keys must be strings' );
+			}
+			if ( \array_key_exists( $key, self::TRANSLATE_LONG ) ) {
+				$dn[self::TRANSLATE_LONG[$key]] = $value;
+				unset( $dn[$key] );
+			}
+		}
 		$this->dnData = $dn;
 	}
 
@@ -45,17 +62,19 @@ class DN implements IteratorAggregate
 	 */
 	public function __toString(): string
 	{
-		$result = '';
+		$result = [];
 		foreach ( $this->dnData as $key => $values ) {
+			\assert( \is_string( $key ), 'All DN keys must be strings' );
 			if ( \is_string( $values ) ) {
 				$values = [$values];
 			}
 			foreach ( $values as $value ) {
-				$result .= "/${key}=${value}";
+				$value = \str_replace( ['\\', ','], ['\\\\', '\\,'], $value );
+				$result[] = "${key}=${value}";
 			}
 		}
 
-		return $result;
+		return \implode( ', ', $result );
 	}
 
 	/**
@@ -69,12 +88,79 @@ class DN implements IteratorAggregate
 	}
 
 	/**
-	 * Get an iterator for the DN array
+	 * Convenience function for setting the commonName in a new DN
+	 * using function chaining
 	 *
-	 * @return Iterator<string,string|array<string>>
+	 * @return DN A new DN with the commonName set
 	 */
-	public function getIterator(): Iterator
+	public function setCommonName( string $commonName ): self
 	{
-		return new ArrayIterator( $this->toArray() );
+		return new self( ['CN' => $commonName] + $this->dnData );
+	}
+
+	/**
+	 * Convenience function for setting the countryName in a new DN
+	 * using function chaining
+	 *
+	 * @return DN A new DN with the countryName set
+	 */
+	public function setCountryName( string $countryName ): self
+	{
+		return new self( ['C' => $countryName] + $this->dnData );
+	}
+
+	/**
+	 * Convenience function for setting the stateOrProvinceName in a new DN
+	 * using function chaining
+	 *
+	 * @return DN A new DN with the stateOrProvinceName set
+	 */
+	public function setStateOrProvinceName( string $stateOrProvinceName ): self
+	{
+		return new self( ['ST' => $stateOrProvinceName] + $this->dnData );
+	}
+
+	/**
+	 * Convenience function for setting the localityName in a new DN
+	 * using function chaining
+	 *
+	 * @return DN A new DN with the localityName set
+	 */
+	public function setLocalityName( string $localityName ): self
+	{
+		return new self( ['L' => $localityName] + $this->dnData );
+	}
+
+	/**
+	 * Convenience function for setting the organizationName in a new DN
+	 * using function chaining
+	 *
+	 * @return DN A new DN with the organizationName set
+	 */
+	public function setOrganizationName( string $organizationName ): self
+	{
+		return new self( ['O' => $organizationName] + $this->dnData );
+	}
+
+	/**
+	 * Convenience function for setting the organizationalUnitName in a new DN
+	 * using function chaining
+	 *
+	 * @return DN A new DN with the organizationalUnitName set
+	 */
+	public function setOrganizationalUnitName( string $organizationalUnitName ): self
+	{
+		return new self( ['OU' => $organizationalUnitName] + $this->dnData );
+	}
+
+	/**
+	 * Convenience function for setting the emailAddress in a new DN
+	 * using function chaining
+	 *
+	 * @return DN A new DN with the emailAddress set
+	 */
+	public function setEmailAddress( string $emailAddress ): self
+	{
+		return new self( ['emailAddress' => $emailAddress] + $this->dnData );
 	}
 }
