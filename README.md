@@ -35,15 +35,20 @@ From this key we will make a signing request.
 
 ```php
 $caCsr = CSR::generate(
-		new DN( ['CN' => 'fyrkat example CA'] ),
-		$caPrivKey
+		new DN( ['CN' => 'fyrkat example CA'] ), // Subject
+		$caPrivKey // CA key
 	);
 ```
 
 This request can now be self-signed.
 
 ```php
-$caCertificate = $caCsr->sign( null, $caPrivKey, 18250, new OpenSSLConfig( OpenSSLConfig::X509_CA ) );
+$caCertificate = $caCsr->sign(
+		null, // CA certificate
+		$caPrivKey, // CA key
+		18250, // Validity in days
+		new OpenSSLConfig( OpenSSLConfig::X509_CA ) // EKU
+	);
 // We need the same $caPrivKey again because self-sign means you sign with your own key.
 // OpenSSLConfig::X509_CA means that the resulting certificate is to be used as a CA.
 // Other options are OpenSSLConfig::X509_SERVER and OpenSSLConfig::X509_CLIENT.
@@ -69,11 +74,17 @@ Now we have `$caPrivKey` and `$caCertificate` to work with.
 $serverPrivKey = new PrivateKey( new OpenSSLConfig( OpenSSLConfig::KEY_EC ) );
 // Instead of OpenSSLConfig::KEY_EC you could use OpenSSLConfig::KEY_RSA.
 $serverCsr = CSR::generate(
-		new DN( ['CN' => 'example.com'] ),
-		$serverPrivKey
+		new DN( ['CN' => 'example.com'] ), // Subject
+		$serverPrivKey // Server key
 	);
-$serverCertificate = $caCsr->sign( $caCertificate, $caPrivKey, 1095, new OpenSSLConfig( OpenSSLConfig::X509_SERVER ) );
-// Using $caCertificate ensures the resulting certificate is signed by $caCertificate, instead of being self-signed.
+$serverCertificate = $caCsr->sign(
+		$caCertificate, // CA certificate
+		$caPrivKey, // CA key
+		1095, // Validity in days
+		new OpenSSLConfig( OpenSSLConfig::X509_SERVER ) // EKU
+	);
+// Using $caCertificate ensures the resulting certificate is signed by $caCertificate,
+// instead of being self-signed.
 // OpenSSLConfig::X509_SERVER indicates that this will be a server certificate.
 ```
 
@@ -82,10 +93,15 @@ We can also make a client certificate.
 ```php
 $clientPrivKey = new PrivateKey( new OpenSSLConfig( OpenSSLConfig::KEY_EC ) );
 $clientCsr = CSR::generate(
-		new DN( ['CN' => 'jornane@example.com'] ),
-		$clientPrivKey
+		new DN( ['CN' => 'jornane@example.com'] ), // Subject
+		$clientPrivKey // Client key
 	);
-$clientCertificate = $caCsr->sign( $caCertificate, $caPrivKey, 1095, new OpenSSLConfig( OpenSSLConfig::X509_CLIENT ) );
+$clientCertificate = $caCsr->sign(
+		$caCertificate, // CA certificate
+		$caPrivKey, // CA key
+		1095, // Validity in days
+		new OpenSSLConfig( OpenSSLConfig::X509_CLIENT ) // EKU
+	);
 ```
 
 ### Retrieving PEM representations

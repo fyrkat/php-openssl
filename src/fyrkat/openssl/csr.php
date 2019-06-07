@@ -62,9 +62,9 @@ class CSR
 		$res = $key->getResource();
 		OpenSSLException::flushErrorMessages();
 		if ( null === $extraattribs ) {
-			$result = \openssl_csr_new( $dn->getArray(), $res, $configargs->getArray() );
+			$result = \openssl_csr_new( $dn->toArray(), $res, $configargs->toArray() );
 		} else {
-			$result = \openssl_csr_new( $dn->getArray(), $res, $configargs->getArray(), $extraattribs );
+			$result = \openssl_csr_new( $dn->toArray(), $res, $configargs->toArray(), $extraattribs );
 		}
 		/** @psalm-suppress RedundantCondition */
 		\assert(
@@ -248,7 +248,7 @@ class CSR
 		$issuerCertResource = null === $issuerCA ? null : $issuerCA->getResource();
 		$issuerKeyResource = $issuerKey->getResource();
 		OpenSSLException::flushErrorMessages();
-		$result = \openssl_csr_sign( $this->csr, $issuerCertResource, $issuerKeyResource, $days, $configargs->getArray(), $serial );
+		$result = \openssl_csr_sign( $this->csr, $issuerCertResource, $issuerKeyResource, $days, $configargs->toArray(), $serial );
 		/** @psalm-suppress RedundantCondition */
 		\assert(
 				false === $result || \is_resource( $result ),
