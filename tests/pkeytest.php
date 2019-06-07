@@ -9,8 +9,8 @@
 
 namespace fyrkat\openssl\tests;
 
-use fyrkat\openssl\PublicKey;
 use fyrkat\openssl\PrivateKey;
+use fyrkat\openssl\PublicKey;
 
 use PHPUnit\Framework\TestCase;
 

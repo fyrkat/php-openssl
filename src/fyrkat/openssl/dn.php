@@ -9,8 +9,8 @@
 
 namespace fyrkat\openssl;
 
-use Iterator;
 use ArrayIterator;
+use Iterator;
 use IteratorAggregate;
 
 /**

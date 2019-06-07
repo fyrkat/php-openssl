@@ -9,12 +9,12 @@
 
 namespace fyrkat\openssl\tests;
 
-use fyrkat\openssl\DN;
 use fyrkat\openssl\CSR;
-use fyrkat\openssl\PrivateKey;
-use PHPUnit\Framework\TestCase;
-
+use fyrkat\openssl\DN;
 use fyrkat\openssl\OpenSSLConfig;
+use fyrkat\openssl\PrivateKey;
+
+use PHPUnit\Framework\TestCase;
 
 class ReadmeMDTest extends TestCase
 {

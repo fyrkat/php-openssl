@@ -9,7 +9,6 @@
 
 namespace fyrkat\openssl;
 
-use Throwable;
 use ArrayAccess;
 use DomainException;
 

@@ -12,8 +12,8 @@ namespace fyrkat\openssl\tests;
 use DateTimeImmutable;
 
 use fyrkat\openssl\DN;
-use fyrkat\openssl\X509;
 use fyrkat\openssl\PrivateKey;
+use fyrkat\openssl\X509;
 
 use PHPUnit\Framework\TestCase;
 

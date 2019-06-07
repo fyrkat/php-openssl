@@ -9,8 +9,8 @@
 
 namespace fyrkat\openssl;
 
-use DomainException;
 use DateTimeInterface;
+use DomainException;
 
 /**
  * Wrapper class around a CSR variable

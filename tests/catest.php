@@ -12,15 +12,14 @@ namespace fyrkat\openssl\tests;
 use DateInterval;
 use DateTimeImmutable;
 
-use fyrkat\openssl\DN;
 use fyrkat\openssl\CSR;
-use fyrkat\openssl\X509;
+use fyrkat\openssl\DN;
+use fyrkat\openssl\OpenSSLConfig;
 use fyrkat\openssl\OpenSSLKey;
 use fyrkat\openssl\PrivateKey;
+use fyrkat\openssl\X509;
 
 use PHPUnit\Framework\TestCase;
-
-use fyrkat\openssl\OpenSSLConfig;
 
 class CATest extends TestCase
 {
