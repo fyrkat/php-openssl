@@ -63,7 +63,7 @@ class DN implements IteratorAggregate
 	 *
 	 * @return array<string,string|array<string>>
 	 */
-	public function getArray(): array
+	public function toArray(): array
 	{
 		return $this->dnData;
 	}
@@ -75,6 +75,6 @@ class DN implements IteratorAggregate
 	 */
 	public function getIterator(): Iterator
 	{
-		return new ArrayIterator( $this->getArray() );
+		return new ArrayIterator( $this->toArray() );
 	}
 }

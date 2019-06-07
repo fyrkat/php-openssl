@@ -69,7 +69,7 @@ class PrivateKey extends OpenSSLKey
 					null === $passphrase,
 					'PrivateKey cannot have a passphrase when creating a new key'
 				);
-			$result = \openssl_pkey_new( $keyOrConfig->getArray() );
+			$result = \openssl_pkey_new( $keyOrConfig->toArray() );
 
 			/** @psalm-suppress RedundantCondition */
 			\assert(
@@ -112,7 +112,7 @@ class PrivateKey extends OpenSSLKey
 		if ( null === $configargs ) {
 			$configargs = new OpenSSLConfig();
 		}
-		$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase, $configargs->getArray() );
+		$result = \openssl_pkey_export_to_file( $this->getResource(), $outputFileName, $passphrase, $configargs->toArray() );
 		/** @psalm-suppress RedundantCondition */
 		\assert(
 				\is_bool( $result ),
@@ -140,7 +140,7 @@ class PrivateKey extends OpenSSLKey
 		if ( null === $configargs ) {
 			$configargs = new OpenSSLConfig();
 		}
-		$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase, $configargs->getArray() );
+		$result = \openssl_pkey_export( $this->getResource(), $output, $passphrase, $configargs->toArray() );
 		/** @psalm-suppress RedundantCondition */
 		\assert(
 				\is_bool( $result ),

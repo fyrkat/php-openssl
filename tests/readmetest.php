@@ -48,12 +48,12 @@ class ReadmeTest extends TestCase
 		$pkPem = $serverCertificate->getPublicKey()->getPublicKeyPem();
 
 		$this->assertSame(
-				$caCertificate->getSubject()->getArray(),
-				$clientCertificate->getIssuerSubject()->getArray()
+				$caCertificate->getSubject()->toArray(),
+				$clientCertificate->getIssuerSubject()->toArray()
 			);
 		$this->assertSame(
-				$caCertificate->getSubject()->getArray(),
-				$serverCertificate->getIssuerSubject()->getArray()
+				$caCertificate->getSubject()->toArray(),
+				$serverCertificate->getIssuerSubject()->toArray()
 			);
 	}
 }

@@ -68,8 +68,8 @@ class CATest extends TestCase
 		$csr = CSR::generate( new DN( ['CN' => 'example.com'] ), $this->ecKey );
 		$signed = $csr->sign( $this->ca, $this->ecKey, 1, $caConfig );
 		$this->assertSame(
-				$this->ca->getSubject()->getArray(),
-				$signed->getIssuerSubject()->getArray()
+				$this->ca->getSubject()->toArray(),
+				$signed->getIssuerSubject()->toArray()
 			);
 		$this->assertTrue( $signed->checkPurpose( X509::PURPOSE_SSL_SERVER, [$this->caFile] ) );
 		$this->assertFalse( $signed->checkPurpose( X509::PURPOSE_SSL_CLIENT, [$this->caFile] ) );
