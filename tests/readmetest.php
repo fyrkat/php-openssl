@@ -16,7 +16,7 @@ use fyrkat\openssl\PrivateKey;
 
 use PHPUnit\Framework\TestCase;
 
-class ReadmeMDTest extends TestCase
+class ReadmeTest extends TestCase
 {
 	public function testReadme(): void
 	{
