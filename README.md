@@ -125,6 +125,13 @@ $serverPrivKeyPem = $serverPrivKey->getPrivateKeyPem( 'supersecret' );
 $pkPem = $serverCertificate->getPublicKey()->getPublicKeyPem();
 ```
 
+## Known issues
+
+CSRs can only be signed for an integer amount of days.
+This is due to the way the [openssl_csr_sign](https://php.net/openssl_csr_sign)
+function works in PHP.
+
+
 ## Testing
 
 	make test
