@@ -74,4 +74,16 @@ class PublicKeyTest extends TestCase
 		$pubkey = $this->privkey->getPublicKey();
 		$this->assertSame( $this->pubkey->getPublicKeyPem(), $pubkey->getPublicKeyPem() );
 	}
+
+	public function testPrivateConstructorFuzz(): void
+	{
+		$this->expectException( 'fyrkat\openssl\OpenSSLException' );
+		new PrivateKey( ':-)' );
+	}
+
+	public function testPublicConstructorFuzz(): void
+	{
+		$this->expectException( 'fyrkat\openssl\OpenSSLException' );
+		new PublicKey( ':-)' );
+	}
 }

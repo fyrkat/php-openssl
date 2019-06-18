@@ -108,13 +108,13 @@ class X509 extends OpenSSLResource
 	{
 		OpenSSLException::flushErrorMessages();
 		if ( null === $untrustedfile ) {
-			$result = \openssl_x509_checkpurpose(
+			$result = @\openssl_x509_checkpurpose(
 					$this->getResource(),
 					$purpose,
 					$ca
 				);
 		} else {
-			$result = \openssl_x509_checkpurpose(
+			$result = @\openssl_x509_checkpurpose(
 					$this->getResource(),
 					$purpose,
 					$ca,
@@ -206,7 +206,7 @@ class X509 extends OpenSSLResource
 	public function fingerprint( string $hashAlgorithm = 'sha1', bool $rawOutput = false ): string
 	{
 		OpenSSLException::flushErrorMessages();
-		$result = \openssl_x509_fingerprint( $this->getResource(), $hashAlgorithm, $rawOutput );
+		$result = @\openssl_x509_fingerprint( $this->getResource(), $hashAlgorithm, $rawOutput );
 		/** @psalm-suppress RedundantCondition */
 		\assert(
 				false === $result || \is_string( $result ),

@@ -55,6 +55,8 @@ return PhpCsFixer\Config::create()
 			'mute_deprecation_error' => false,
 			'noise_remaining_usages' => true,
 			'noise_remaining_usages_exclude' => [
+				'openssl_x509_checkpurpose',
+				'openssl_x509_fingerprint',
 				'openssl_x509_read',
 			]
 		],

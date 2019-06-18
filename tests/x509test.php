@@ -112,4 +112,22 @@ class x509Test extends TestCase
 		$this->expectException( 'fyrkat\openssl\OpenSSLException' );
 		$x509 = new X509( "file:/{$this->x509File}" );
 	}
+
+	public function testConstructorFuzz(): void
+	{
+		$this->expectException( 'fyrkat\openssl\OpenSSLException' );
+		new X509( ':-)' );
+	}
+
+	public function testFingerprintFuzz(): void
+	{
+		$this->expectException( 'fyrkat\openssl\OpenSSLException' );
+		$this->x509->fingerprint( ':-)', false );
+	}
+
+	public function testPurposeFuzz(): void
+	{
+		$this->expectException( 'fyrkat\openssl\OpenSSLException' );
+		$this->x509->checkPurpose( -1, [], '/tmp/nonexistent' );
+	}
 }
