@@ -127,9 +127,10 @@ $pkPem = $serverCertificate->getPublicKey()->getPublicKeyPem();
 
 ## Known issues
 
-CSRs can only be signed for an integer amount of days.
-This is due to the way the [openssl_csr_sign](https://php.net/openssl_csr_sign)
-function works in PHP.
+### Limitations in [openssl_csr_sign](https://php.net/openssl_csr_sign)
+
+  * When signing a CSR, the expire date is an integer amount of days from the current date/time.
+  * When signing a CSR, it is not possible to set the not before date.  This is always the current date/time.
 
 
 ## Testing

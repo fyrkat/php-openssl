@@ -211,7 +211,8 @@ class CSR
 	 * @param ?X509                 $issuerCA   The CA certificate used to sign this CSR, null for self-sign
 	 * @param PrivateKey            $issuerKey  The private key corresponding to $issuerCA (if $issuerCA is null,
 	 *                                          use the PrivateKey that was used to generate this CSR)
-	 * @param DateTimeInterface|int $validDays  The amount of days this certificate must be valid
+	 * @param DateTimeInterface|int $validDays  the amount of days this certificate must be valid
+	 *                                          DateTime is rounded up to the nearest integer amount of days
 	 * @param OpenSSLConfig         $configargs OpenSSL Configuration for this signing operation
 	 * @param ?int                  $serial     Serial number, generate a random one if omitted
 	 *
@@ -222,7 +223,10 @@ class CSR
 	 */
 	public function sign( ?X509 $issuerCA, PrivateKey $issuerKey, $validDays, OpenSSLConfig $configargs, int $serial = null ): X509
 	{
-		\assert( \is_int( $validDays ) || $validDays instanceof DateTimeInterface, '$validDays must be an integer or DateTimeInterface' );
+		\assert(
+				\is_int( $validDays ) || $validDays instanceof DateTimeInterface,
+				'$validDays must be an integer or DateTimeInterface'
+			);
 		/** @var int */
 		$days = ( $validDays instanceof DateTimeInterface )
 			? static::dateToDays( $validDays )
