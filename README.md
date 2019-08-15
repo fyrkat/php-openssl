@@ -132,6 +132,13 @@ $pkPem = $serverCertificate->getPublicKey()->getPublicKeyPem();
   * When signing a CSR, the expire date is an integer amount of days from the current date/time.
   * When signing a CSR, it is not possible to set the not before date.  This is always the current date/time.
 
+### Missing features
+
+  * There is no shorthand to use altNames (#4)
+
+### Security issues
+
+  * It is not possible to filter extensions in a CSR, making it a risk to allow user input CSR (#3)
 
 ## Testing
 
