@@ -41,6 +41,18 @@ class CSR
 	}
 
 	/**
+	 * Get the certificate as a PEM string
+	 *
+	 * @see $this->getRequestPem(bool)
+	 *
+	 * @return string The PEM string
+	 */
+	public function __toString()
+	{
+		return $this->getRequestPem();
+	}
+
+	/**
 	 * Generates a CSR
 	 *
 	 * @see http://php.net/manual/en/function.openssl-csr-new.php
@@ -111,7 +123,7 @@ class CSR
 	public function exportToFile( string $outputFileName, bool $withText = false ): void
 	{
 		OpenSSLException::flushErrorMessages();
-		$result = !\openssl_csr_export_to_file( $this->csr, $outputFileName, !$withText );
+		$result = \openssl_csr_export_to_file( $this->csr, $outputFileName, !$withText );
 		/** @psalm-suppress RedundantCondition */
 		\assert(
 				\is_bool( $result ),
@@ -135,7 +147,7 @@ class CSR
 	public function export( string &$output, bool $withText = false ): void
 	{
 		OpenSSLException::flushErrorMessages();
-		$result = !\openssl_csr_export( $this->csr, $output, !$withText );
+		$result = \openssl_csr_export( $this->csr, $output, !$withText );
 		/** @psalm-suppress RedundantCondition */
 		\assert(
 				\is_bool( $result ),
@@ -263,5 +275,24 @@ class CSR
 		}
 
 		return new X509( $result );
+	}
+
+	/**
+	 * Exports the CSR as a PEM encoded string
+	 *
+	 * @see http://php.net/manual/en/function.openssl-csr-export.php
+	 *
+	 * @param bool $withText Add human-readable text to the output
+	 *
+	 * @throws OpenSSLException
+	 *
+	 * @return string The PEM string
+	 */
+	public function getRequestPem( bool $withText = false )
+	{
+		$result = '';
+		$this->export( $result, $withText );
+
+		return $result;
 	}
 }
